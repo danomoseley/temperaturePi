@@ -9,15 +9,15 @@ import smtplib
 import sqlite3
 from config import config
 
-dir = os.path.dirname(os.path.realpath(__file__))
+DIR = os.path.dirname(os.path.realpath(__file__))
 db_filename = 'sensor_values.db'
-db_filepath = dir + '/' + db_filename
+db_filepath = os.path.join(DIR, db_filename)
 
 db_is_new = not os.path.exists(db_filepath)
 conn = sqlite3.connect(db_filepath)
 
 def provisionDatabase():
-    schema_filepath = dir + '/sensor_values_schema.sql'
+    schema_filepath = os.path.join(DIR, 'sensor_values_schema.sql')
     with open(schema_filepath, 'rt') as f:
         schema = f.read()
         conn.executescript(schema)
