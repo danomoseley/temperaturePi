@@ -144,6 +144,7 @@ for graph in graphs:
                 label.rjust(len(label) + max_name_length))
 
             for sensor in graph['sensors']:
+                display_name = sensor['name'] + '\:'
                 command += '''DEF:%(ds_name)s=%(rrd_path)s:%(ds_name)s:AVERAGE \\
                     LINE%(line_stroke)d:%(ds_name)s%(color)s:'%(display_name)s' \\
                     GPRINT:%(ds_name)s:LAST:'%%%(padding)d.1lf%(unit)s' \\
@@ -155,7 +156,7 @@ for graph in graphs:
                             'rrd_path': graph['rrd_path'],
                             'line_stroke': graph_variation['line_stroke'],
                             'color': sensor['color'],
-                            'display_name': sensor['name'] + '\:',
+                            'display_name': display_name.ljust(max_name_length),
                             'padding': padding,
                             'unit': graph['unit']
                           }
