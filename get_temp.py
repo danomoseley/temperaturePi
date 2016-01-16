@@ -35,15 +35,11 @@ def populateInitialSensorData():
     for serial_code in config['temp_sensors']:
         sensor = config['temp_sensors'][serial_code]
         name = sensor['name']
-        if 'alert_threshold' in sensor:
-            alert_threshold = sensor['alert_threshold']
-        else:
-            alert_threshold = None
         cur.execute('INSERT INTO sensors \
-                        (serial_code, name, alert_threshold) \
+                        (serial_code, name) \
                      VALUES \
-                        (?, ?, ?)',
-                        (serial_code, name, alert_threshold))
+                        (?, ?)',
+                        (serial_code, name))
         conn.commit()
 
 def getExceptionInfo(e):
@@ -70,29 +66,27 @@ def getSensorSerialCodeMap():
     sensors = {}
     cur = conn.cursor()
     cur.execute('SELECT \
-                     id, serial_code, name, alert_threshold \
+                     id, serial_code, name \
                  FROM sensors WHERE deleted = 0;')
     for row in cur.fetchall():
         sensors[row[1]] = {
                 'id': row[0],
                 'serial_code': row[1],
-                'name': row[2],
-                'alert_threshold':row[3]
+                'name': row[2]
             }
     return sensors
 
 def getSensorBySerialCode(serial_code):
     cur = conn.cursor()
     cur.execute('SELECT \
-                     id, serial_code, name, alert_threshold \
+                     id, serial_code, name \
                  FROM sensors WHERE deleted = 0 and serial_code = ?;',
                  (serial_code,))
     row = cur.fetchone()
     return {
         'id': row[0],
         'serial_code': row[1],
-        'name': row[2],
-        'alert_threshold':row[3]
+        'name': row[2]
     }
 
 def addTemp(serial_code, value):

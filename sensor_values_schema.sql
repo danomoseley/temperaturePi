@@ -3,7 +3,6 @@ create table sensors (
     serial_code  text not null,
     name         text not null,
     location     text,
-    alert_threshold  real,
     deleted      integer not null default 0
 );
 
