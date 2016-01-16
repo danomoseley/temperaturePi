@@ -71,7 +71,7 @@ for graph in graphs:
 
     label = 'NOW'.rjust(graph['pad']+3)+'MIN'.rjust(graph['pad']+4)+'MAX'.rjust(graph['pad']+3)+'AVG'.rjust(graph['pad']+4)
     command = '''
-    rrdtool graph latest_graphs/%s \\
+    rrdtool graph %s/latest_graphs/%s \\
     -w 1024 -h 500 -a PNG \\
     --title='%s' \\
     --font TITLE:%d: \\
@@ -82,7 +82,7 @@ for graph in graphs:
     --start %s --end now \\
     --vertical-label 'Temperature (°F)' \\
     COMMENT:'%s\\n' \\
-    ''' % (graph['filename'], graph['title'], graph['title_font'], graph['axis_font'], \
+    ''' % (DIR, graph['filename'], graph['title'], graph['title_font'], graph['axis_font'], \
         graph['legend_font'], graph['unit_font'], graph['start'], label.rjust(len(label)+max_name_length))
 
     for sensor_id in sorted_temp_sensors:
@@ -90,13 +90,13 @@ for graph in graphs:
         display_name = config['temp_sensors'][sensor_id]['name'] + '\:'
         color = config['temp_sensors'][sensor_id]['color']
 
-        command += '''DEF:%s=temp.rrd:%s:AVERAGE \\
+        command += '''DEF:%s=%s/temp.rrd:%s:AVERAGE \\
             LINE%d:%s%s:'%s' \\
             GPRINT:%s:LAST:'%%%d.1lf°' \\
             GPRINT:%s:MIN:'%%%d.1lf°' \\
             GPRINT:%s:MAX:'%%%d.1lf°' \\
             GPRINT:%s:AVERAGE:'%%%d.1lf°\\n' \\
-            ''' % (ds_name, ds_name, graph['line_stroke'], ds_name, color, display_name.ljust(max_name_length), \
+            ''' % (ds_name, DIR, ds_name, graph['line_stroke'], ds_name, color, display_name.ljust(max_name_length), \
                 ds_name, graph['pad'], ds_name, graph['pad'], ds_name, graph['pad'], ds_name, graph['pad'])
     command += '''"COMMENT:\\n" \\
         "COMMENT:$(date "+%m/%d %l:%M %p" | sed 's/:/\\\:/g')"'''

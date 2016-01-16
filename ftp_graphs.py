@@ -8,7 +8,7 @@ DIR = os.path.dirname(os.path.realpath(__file__))
 
 if os.path.isfile(os.path.join(DIR, 'temp.rrd')):
     getstatusoutput(os.path.join(DIR, 'get_temp.pl'))
-    getstatusoutput(os.path.join(DIR, 'create_graphs_temp.sh'))
+    getstatusoutput(os.path.join(DIR, 'create_graphs_temp.py'))
 
 if os.path.isfile(os.path.join(DIR, 'humidity.rrd')):
     getstatusoutput(os.path.join(DIR, 'get_humidity.pl'))
