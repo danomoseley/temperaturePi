@@ -25,8 +25,8 @@ def provisionDatabase():
 
 def populateInitialSensorData():
     cur = conn.cursor()
-    for serial_code in config['sensors']:
-        sensor = config['sensors'][serial_code]
+    for serial_code in config['temp_sensors']:
+        sensor = config['temp_sensors'][serial_code]
         name = sensor['name']
         if 'alert_threshold' in sensor:
             alert_threshold = sensor['alert_threshold']
@@ -99,10 +99,10 @@ def readSensors():
     errors = []
     for file_path in glob.glob('/sys/bus/w1/devices/28-*'):
         sensor_id = os.path.basename(file_path)
-        if sensor_id not in config['sensors']:
+        if sensor_id not in config['temp_sensors']:
             errors.append("%s not found in config" % sensor_id)
             continue
-        sensor_config = config['sensors'][sensor_id]
+        sensor_config = config['temp_sensors'][sensor_id]
         data_file_path = file_path+'/w1_slave'
         f = open(data_file_path, 'r')
         line_1 = f.readline().rstrip()
