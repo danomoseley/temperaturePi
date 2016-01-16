@@ -161,7 +161,7 @@ for graph in graphs:
                             'unit': graph['unit']
                           }
             command += '''"COMMENT:\\n" \\
-                "COMMENT:$(date "+%m/%d %l:%M %p" | sed 's/:/\\\:/g')"'''
+                "COMMENT:$(date "+%m/%d/%y %l:%M %p" | sed 's/:/\\\:/g')"'''
 
             #print command
             status = getstatusoutput(command)
