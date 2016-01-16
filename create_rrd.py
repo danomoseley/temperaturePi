@@ -25,7 +25,7 @@ databases = [
 ]
 
 for database in databases:
-    if not os.path.isfile(database['rrd_path']):
+    if not os.path.isfile(database['rrd_path']) and len(database['sensors']):
         command = 'rrdtool create %s --start N --step 300 \\\n' % (database['rrd_path'])
         for sensor in database['sensors']:
             command += 'DS:%s:GAUGE:600:U:U \\\n' % sensor['ds_name']
@@ -34,7 +34,7 @@ for database in databases:
         RRA:AVERAGE:0.5:12:168 \\
         RRA:AVERAGE:0.5:12:720 \\
         RRA:AVERAGE:0.5:288:365'''
-        print command
+        #print command
         status, message = getstatusoutput(command)
         if status == 0:
             print '%s created' % database['rrd_path']
