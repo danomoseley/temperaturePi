@@ -1,11 +1,5 @@
 #!/bin/bash
 DIR=$(cd $(dirname $0); pwd -P)
- 
-#set to C if using Celsius
-TEMP_SCALE="F"
- 
-#define the desired colors for the graphs
-INTEMP_COLOR="#CC0000"
 
 rrdtool graph $DIR/latest_graphs/temp_hourly.png \
 -w 1024 -h 500 -a PNG \
@@ -49,7 +43,7 @@ GPRINT:under_stairs:MIN:"    %2.1lf°" \
 GPRINT:under_stairs:MAX:"    %2.1lf°" \
 GPRINT:under_stairs:AVERAGE:"    %2.1lf°\n" \
 DEF:outside=$DIR/temp.rrd:outside:AVERAGE \
-LINE2:outside$INTEMP_COLOR:"Outside Southwest Corner\:" \
+LINE2:outside#CC0000:"Outside Southwest Corner\:" \
 GPRINT:outside:LAST:"  %2.1lf°" \
 GPRINT:outside:MIN:"    %2.1lf°" \
 GPRINT:outside:MAX:"    %2.1lf°" \
@@ -97,7 +91,7 @@ GPRINT:under_stairs:MIN:"    %2.1lf°" \
 GPRINT:under_stairs:MAX:"    %2.1lf°" \
 GPRINT:under_stairs:AVERAGE:"    %2.1lf°\n" \
 DEF:outside=$DIR/temp.rrd:outside:AVERAGE \
-LINE2:outside$INTEMP_COLOR:"Outside Southwest Corner\:" \
+LINE2:outside#CC0000:"Outside Southwest Corner\:" \
 GPRINT:outside:LAST:"  %2.1lf°" \
 GPRINT:outside:MIN:"    %2.1lf°" \
 GPRINT:outside:MAX:"    %2.1lf°" \
@@ -145,7 +139,7 @@ GPRINT:under_stairs:MIN:"%2.1lf°" \
 GPRINT:under_stairs:MAX:"%2.1lf°" \
 GPRINT:under_stairs:AVERAGE:"%2.1lf°\n" \
 DEF:outside=$DIR/temp.rrd:outside:AVERAGE \
-LINE8:outside$INTEMP_COLOR:"Outside\:" \
+LINE8:outside#CC0000:"Outside\:" \
 GPRINT:outside:LAST:"    %2.1lf°" \
 GPRINT:outside:MIN:"%2.1lf°" \
 GPRINT:outside:MAX:"%2.1lf°" \
@@ -195,7 +189,7 @@ GPRINT:under_stairs:MIN:"    %2.1lf°" \
 GPRINT:under_stairs:MAX:"    %2.1lf°" \
 GPRINT:under_stairs:AVERAGE:"    %2.1lf°\n" \
 DEF:outside=$DIR/temp.rrd:outside:AVERAGE \
-LINE2:outside$INTEMP_COLOR:"Outside Southwest Corner\:" \
+LINE2:outside#CC0000:"Outside Southwest Corner\:" \
 GPRINT:outside:LAST:"  %2.1lf°" \
 GPRINT:outside:MIN:"    %2.1lf°" \
 GPRINT:outside:MAX:"    %2.1lf°" \
@@ -243,7 +237,7 @@ GPRINT:under_stairs:MIN:"    %2.1lf°" \
 GPRINT:under_stairs:MAX:"    %2.1lf°" \
 GPRINT:under_stairs:AVERAGE:"    %2.1lf°\n" \
 DEF:outside=$DIR/temp.rrd:outside:AVERAGE \
-LINE2:outside$INTEMP_COLOR:"Outside Southwest Corner\:" \
+LINE2:outside#CC0000:"Outside Southwest Corner\:" \
 GPRINT:outside:LAST:"  %2.1lf°" \
 GPRINT:outside:MIN:"    %2.1lf°" \
 GPRINT:outside:MAX:"    %2.1lf°" \
@@ -291,7 +285,7 @@ GPRINT:under_stairs:MIN:"    %2.1lf°" \
 GPRINT:under_stairs:MAX:"    %2.1lf°" \
 GPRINT:under_stairs:AVERAGE:"    %2.1lf°\n" \
 DEF:outside=$DIR/temp.rrd:outside:AVERAGE \
-LINE2:outside$INTEMP_COLOR:"Outside Southwest Corner\:" \
+LINE2:outside#CC0000:"Outside Southwest Corner\:" \
 GPRINT:outside:LAST:"  %2.1lf°" \
 GPRINT:outside:MIN:"    %2.1lf°" \
 GPRINT:outside:MAX:"    %2.1lf°" \

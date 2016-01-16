@@ -1,12 +1,6 @@
 #!/bin/bash
 DIR=$(cd $(dirname $0); pwd -P)
 
-#set to C if using Celsius
-TEMP_SCALE="F"
- 
-#define the desired colors for the graphs
-INTEMP_COLOR="#CC0000"
-
 rrdtool graph $DIR/latest_graphs/humidity_hourly.png \
 -w 1024 -h 500 -a PNG \
 --title='Humidity Last 4 Hours' \
@@ -116,4 +110,3 @@ GPRINT:living_room:LAST:"               %2.1lf%%" \
 GPRINT:living_room:MIN:"    %2.1lf%%" \
 GPRINT:living_room:MAX:"    %2.1lf%%" \
 GPRINT:living_room:AVERAGE:"    %2.1lf%%\n" \
-
