@@ -18,32 +18,32 @@ max_name_length += 2
 
 graphs = [
     {
-        'filename': 'temp_hourly_test.png',
+        'filename': 'temp_hourly.png',
         'title': 'Temperature Last 4 Hours',
         'start': '-14400'
     },
     {
-        'filename': 'temp_daily_test.png',
+        'filename': 'temp_daily.png',
         'title': 'Temperature Last 24 Hours',
         'start': '-1d'
     },
     {
-        'filename': 'temp_weekly_test.png',
+        'filename': 'temp_weekly.png',
         'title': 'Weekly Temperature',
         'start': '-1w'
     },
     {
-        'filename': 'temp_monthly_test.png',
+        'filename': 'temp_monthly.png',
         'title': 'Monthly Temperature',
         'start': '-1m'
     },
     {
-        'filename': 'temp_yearly_test.png',
+        'filename': 'temp_yearly.png',
         'title': 'Yearly Temperature',
         'start': '-1y'
     },
     {
-        'filename': 'temp_daily_mobile_test.png',
+        'filename': 'temp_daily_mobile.png',
         'title': 'Temperature Last 24 Hours',
         'start': '-1d',
         'title_font': 30,
