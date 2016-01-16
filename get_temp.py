@@ -8,6 +8,7 @@ import re
 import smtplib
 import sqlite3
 from config import config
+from commands import getstatusoutput
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 db_filename = 'sensor_values.db'
@@ -15,6 +16,12 @@ db_filepath = os.path.join(DIR, db_filename)
 
 db_is_new = not os.path.exists(db_filepath)
 conn = sqlite3.connect(db_filepath)
+
+modules = open('/proc/modules').read()
+if 'w1_therm' not in modules:
+    getstatusoutput('sudo modprobe w1-therm')
+if 'w1_gpio' not in modules:
+    getstatusoutput('sudo modprobe w1-gpio')
 
 def provisionDatabase():
     schema_filepath = os.path.join(DIR, 'sensor_values_schema.sql')
@@ -97,6 +104,7 @@ def addTemp(serial_code, value):
 
 def readSensors():
     errors = []
+    temps = [None]*(len(config['temp_sensors'])+1)
     for file_path in glob.glob('/sys/bus/w1/devices/28-*'):
         sensor_id = os.path.basename(file_path)
         if sensor_id not in config['temp_sensors']:
@@ -119,6 +127,8 @@ def readSensors():
                     temp_f = (temp_c * 9/5) + 32
                     
                     addTemp(sensor_id, temp_f)
+                    rrd_order = config['temp_sensors'][sensor_id]['rrd_order']
+                    temps[rrd_order] = temp_f
                     
                     if 'alert_threshold' in sensor_config:
                         threshold = sensor_config['alert_threshold']
@@ -131,6 +141,16 @@ def readSensors():
         else:
             errors.append('Error matching status in %s' % data_file_path)
 
+    temps = [x for x in temps if x is not None]
+    if len(temps) == len(config['temp_sensors']):
+        rrd_path = os.path.join(DIR, 'temp.rrd')
+        temp_values = ':'.join(map(str, temps))
+        command = '/usr/bin/rrdtool update %s N:%s' % (rrd_path, temp_values)
+        status = getstatusoutput(command)
+        if status != 0:
+            errors.append('Error running %s' % command)
+    else:
+        errors.append('Error processing temperature sensors')
     return errors
 
 def getDailySensorReadingMetrics():
