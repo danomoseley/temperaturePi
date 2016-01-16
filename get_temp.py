@@ -146,9 +146,9 @@ def readSensors():
         rrd_path = os.path.join(DIR, 'temp.rrd')
         temp_values = ':'.join(map(str, temps))
         command = '/usr/bin/rrdtool update %s N:%s' % (rrd_path, temp_values)
-        status = getstatusoutput(command)
+        status, message = getstatusoutput(command)
         if status != 0:
-            errors.append('Error running %s' % command)
+            errors.append('Error running %s - %d - %s' % (command, status, message))
     else:
         errors.append('Error processing temperature sensors')
     return errors
