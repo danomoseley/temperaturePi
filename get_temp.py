@@ -124,7 +124,7 @@ def readSensors():
                     rrd_order = config['temp_sensors'][sensor_id]['rrd_order']
                     temps[rrd_order] = temp_f
                     
-                    if 'alert_threshold' in sensor_config:
+                    if 'alert_threshold' in sensor_config and sensor_config['alert_threshold']:
                         threshold = sensor_config['alert_threshold']
                         if temp_f < threshold:
                             errors.append("%s current temp %s is below threshold of %s" % (sensor_config['name'], temp_f, threshold))
