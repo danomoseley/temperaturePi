@@ -42,6 +42,14 @@ config = {
             'color': '#CC0000'
         }
     },
+    'humidity_sensors': {
+        14: {
+            'name': 'Living Room',
+            'ds_name': 'living_room',
+            'display_order': 1,
+            'color': '#66CCFF'
+        }
+    }
     'gmail': {
         'username': 'email@gmail.com',
         'password': 'password',
