@@ -57,7 +57,7 @@ graphs = [
     },
     {
         'rrd_path': os.path.join(DIR, 'humidity.rrd'),
-        'vertical_label': 'Relative Humidity (%%)',
+        'vertical_label': 'Relative Humidity (%)',
         'unit': '%%',
         'sensors': sorted_humidity_sensors,
         'variations': [
