@@ -12,5 +12,10 @@ config = {
         'from_address': 'email@gmail.com',
         'to_addresses': 'email@gmail.com',
         'site_url': 'http://my.awesometemp.com'
+    },
+    'remote': {
+        'host': 'direct.myhost.com',
+        'user': 'user',
+        'path': '/var/www/temperaturePi'
     }
 }
