@@ -7,8 +7,13 @@ from commands import getstatusoutput
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 
-sorted_temp_sensors = [config['temp_sensors'][k] for k in sorted(config['temp_sensors'], key=lambda key: config['temp_sensors'][key]['display_order'])]
-sorted_humidity_sensors = [config['humidity_sensors'][k] for k in sorted(config['humidity_sensors'], key=lambda key: config['humidity_sensors'][key]['display_order'])]
+temp_sensors = config['temp_sensors']
+sorted_temp_sensor_ids = sorted(temp_sensors, key=lambda key: temp_sensors[key]['display_order'])
+sorted_temp_sensors = [temp_sensors[k] for k in sorted_temp_sensor_ids]
+
+humidity_sensors = config['humidity_sensors']
+sorted_humidity_sensor_ids = sorted(humidity_sensors, key=lambda key: humidity_sensors[key]['display_order'])
+sorted_humidity_sensors = [humidity_sensors[k] for k in sorted_humidity_sensor_ids]
 
 graphs = [
     {
@@ -102,7 +107,7 @@ graphs = [
 ]
 
 for graph in graphs:
-    if os.path.isfile(graph['rrd_path']):
+    if os.path.isfile(graph['rrd_path']) and len(graph['sensors']):
         max_name_length = 0
         for sensor in graph['sensors']:
             name_length = len(sensor['name'])
