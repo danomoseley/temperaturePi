@@ -17,7 +17,7 @@ sorted_humidity_sensors = [humidity_sensors[k] for k in sorted_humidity_sensor_i
 
 graphs = [
     {
-        'rrd_path': os.path.join(DIR, 'temp.rrd'),
+        'rrd_path': os.path.join(DIR, 'database', 'temp.rrd'),
         'vertical_label': 'Temperature (°F)',
         'unit': '°',
         'sensors': sorted_temp_sensors,
@@ -61,7 +61,7 @@ graphs = [
         ]
     },
     {
-        'rrd_path': os.path.join(DIR, 'humidity.rrd'),
+        'rrd_path': os.path.join(DIR, 'database', 'humidity.rrd'),
         'vertical_label': 'Relative Humidity (%)',
         'unit': '%%',
         'sensors': sorted_humidity_sensors,
@@ -106,6 +106,11 @@ graphs = [
     }
 ]
 
+directory = os.path.join(DIR, 'latest_graphs')
+
+if not os.path.exists(directory):
+    os.makedirs(directory)
+
 for graph in graphs:
     if os.path.isfile(graph['rrd_path']) and len(graph['sensors']):
         max_name_length = 0
@@ -131,7 +136,7 @@ for graph in graphs:
             padding = graph_variation['padding']
             label = 'NOW'.rjust(padding+3)+'MIN'.rjust(padding+4)+'MAX'.rjust(padding+3)+'AVG'.rjust(padding+4)
             command = '''
-            rrdtool graph %s/latest_graphs/%s \\
+            rrdtool graph %s/%s \\
             -w 1024 -h 500 -a PNG \\
             --title='%s' \\
             --font TITLE:%d: \\
@@ -142,7 +147,7 @@ for graph in graphs:
             --start %s --end now \\
             --vertical-label '%s' \\
             COMMENT:'%s\\n' \\
-            ''' % (DIR, graph_variation['filename'], graph_variation['title'], \
+            ''' % (directory, graph_variation['filename'], graph_variation['title'], \
                 graph_variation['title_font'], graph_variation['axis_font'], \
                 graph_variation['legend_font'], graph_variation['unit_font'], \
                 graph_variation['start'], graph['vertical_label'], \

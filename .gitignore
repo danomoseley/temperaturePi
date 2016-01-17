@@ -3,3 +3,4 @@
 *.db
 config.py
 latest_graphs/
+database/

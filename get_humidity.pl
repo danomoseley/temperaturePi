@@ -16,7 +16,7 @@ while ($attempts < 5) {
         $output =~ /(\d+\.\d+)\n/i;
         $humidity = $1;
         print "Living Room: $humidity%\n";
-        $rrd = `/usr/bin/rrdtool update $dir/humidity.rrd N:$humidity`;
+        $rrd = `/usr/bin/rrdtool update $dir/database/humidity.rrd N:$humidity`;
         last;
     }
     $attempts++;

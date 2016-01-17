@@ -6,10 +6,10 @@ from config import config
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 
-if os.path.isfile(os.path.join(DIR, 'temp.rrd')):
+if os.path.isfile(os.path.join(DIR, 'database', 'temp.rrd')):
     getstatusoutput(os.path.join(DIR, 'get_temp.py'))
 
-if os.path.isfile(os.path.join(DIR, 'humidity.rrd')):
+if os.path.isfile(os.path.join(DIR, 'database', 'humidity.rrd')):
     getstatusoutput(os.path.join(DIR, 'get_humidity.pl'))
 
 getstatusoutput(os.path.join(DIR, 'create_graphs.py'))

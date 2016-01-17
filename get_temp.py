@@ -12,7 +12,7 @@ from commands import getstatusoutput
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 db_filename = 'sensor_values.db'
-db_filepath = os.path.join(DIR, db_filename)
+db_filepath = os.path.join(DIR, 'database', db_filename)
 
 db_is_new = not os.path.exists(db_filepath)
 conn = sqlite3.connect(db_filepath)
@@ -137,7 +137,7 @@ def readSensors():
 
     temps = [x for x in temps if x is not None]
     if len(temps) == len(config['temp_sensors']):
-        rrd_path = os.path.join(DIR, 'temp.rrd')
+        rrd_path = os.path.join(DIR, 'database', 'temp.rrd')
         temp_values = ':'.join(map(str, temps))
         command = '/usr/bin/rrdtool update %s N:%s' % (rrd_path, temp_values)
         status, message = getstatusoutput(command)
