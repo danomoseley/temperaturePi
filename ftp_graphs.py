@@ -14,16 +14,12 @@ if os.path.isfile(os.path.join(DIR, 'database', 'humidity.rrd')):
 
 getstatusoutput(os.path.join(DIR, 'create_graphs.py'))
 
-ssh = paramiko.SSHClient()
-ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-ssh.connect(config['remote']['host'], username=config['remote']['user'])
+remote_path = os.path.join(config['remote']['path'], 'latest_graphs')
 
-sftp = ssh.open_sftp();
-for root, dirs, files in os.walk(os.path.join(DIR, 'latest_graphs')):
-    for name in files:
-        local_path = os.path.join(root, name)
-        remote_folder = os.path.join(config['remote']['path'], 'latest_graphs')
-        remote_path = os.path.join(remote_folder, name)
-        sftp.put(local_path, remote_path)
+command = "rsync -a --bwlimit=500 %s/latest_graphs/ %s@%s:%s" % (DIR, config['remote']['user'], \
+    config['remote']['host'], remote_path)
 
-sftp.close()
+status, message = getstatusoutput(command)
+
+if status != 0:
+    print message
