@@ -39,6 +39,6 @@ for database in databases:
         if status == 0:
             print '%s created' % database['rrd_path']
         else:
-            print 'Error creating %s' % database['rrd_path']
+            print 'Error creating %s - %s' % (database['rrd_path'], message)
     else:
         print '%s already exists' % database['rrd_path']
