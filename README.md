@@ -5,6 +5,7 @@ http://abyz.co.uk/rpi/pigpio/examples.html#pdif2_DHTXXD
 
 ### SETUP
 - Populate config.py using config.sample.py as a guide
+- chmod 600 config.py
 - Run create_rrd.py
 - Populate crontab using crontab_example.txt as a guide
 - Add id_rsa.pub to authorized_keys on remote server
