@@ -7,7 +7,7 @@ import pprint
 
 max_display_order = 0
 max_rrd_order = 0
-colors = ['#66CCFF', '#0033CC', '#fdd80e', '#CC00CC', '#009900', '#CC0000']
+colors = ['#66CCFF', '#0033CC', '#fdd80e', '#CC00CC', '#009900', '#CC0000', '#000000']
 for sensor_id in config['temp_sensors']:
     sensor = config['temp_sensors'][sensor_id]
     if sensor['display_order'] > max_display_order:
