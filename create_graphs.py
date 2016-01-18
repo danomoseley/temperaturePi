@@ -53,7 +53,7 @@ graphs = [
                 'start': '-1d',
                 'title_font': 30,
                 'axis_font': 17,
-                'legend_font': 30,
+                'legend_font': 29,
                 'unit_font': 20,
                 'padding': 4,
                 'line_stroke': 8
@@ -97,7 +97,7 @@ graphs = [
                 'start': '-1d',
                 'title_font': 30,
                 'axis_font': 17,
-                'legend_font': 30,
+                'legend_font': 29,
                 'unit_font': 20,
                 'padding': 4,
                 'line_stroke': 8
