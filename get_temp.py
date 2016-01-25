@@ -7,6 +7,7 @@ import traceback
 import re
 import smtplib
 import sqlite3
+import time
 from config import config
 from commands import getstatusoutput
 
@@ -106,34 +107,37 @@ def readSensors():
             continue
         sensor_config = config['temp_sensors'][sensor_id]
         data_file_path = file_path+'/w1_slave'
-        f = open(data_file_path, 'r')
-        line_1 = f.readline().rstrip()
-        line_2 = f.readline().rstrip()
-        status_re = re.search("(\w*)$", line_1)
-        if status_re:
-            status_match = status_re.group(0)
-            status = (status_match == 'YES')
-            if status:
-                temp_re = re.search("t=(-?\d*)$", line_2)
-                if temp_re:
-                    temp_str = temp_re.group(1)
-                    temp_c = float(temp_str)/1000
-                    temp_f = (temp_c * 9/5) + 32
-                    
-                    addTemp(sensor_id, temp_f)
-                    rrd_order = config['temp_sensors'][sensor_id]['rrd_order']
-                    temps[rrd_order] = temp_f
-                    
-                    if 'alert_threshold' in sensor_config and sensor_config['alert_threshold']:
-                        threshold = sensor_config['alert_threshold']
-                        if temp_f < threshold:
-                            errors.append("%s current temp %s is below threshold of %s" % (sensor_config['name'], temp_f, threshold))
+        failed_read_attempts = 0
+        while failed_read_attempts < 5:
+            f = open(data_file_path, 'r')
+            line_1 = f.readline().rstrip()
+            line_2 = f.readline().rstrip()
+            status_re = re.search("(\w*)$", line_1)
+            if status_re:
+                status_match = status_re.group(0)
+                status = (status_match == 'YES')
+                if status:
+                    temp_re = re.search("t=(-?\d*)$", line_2)
+                    if temp_re:
+                        temp_str = temp_re.group(1)
+                        temp_c = float(temp_str)/1000
+                        temp_f = (temp_c * 9/5) + 32
+                        addTemp(sensor_id, temp_f)
+                        rrd_order = config['temp_sensors'][sensor_id]['rrd_order']
+                        temps[rrd_order] = temp_f
+                        if 'alert_threshold' in sensor_config and sensor_config['alert_threshold']:
+                            threshold = sensor_config['alert_threshold']
+                            if temp_f < threshold:
+                                errors.append("%s current temp %s is below threshold of %s" % (sensor_config['name'], temp_f, threshold))
+                        break
+                    else:
+                        errors.append('Error matching temp in %s' % data_file_path)
                 else:
-                    errors.append('Error matching temp in %s' % data_file_path)
+                    errors.append('Error reading temp from %s sensor %s (%s)' % (sensor_config['name'], sensor_id, status_match))
             else:
-                errors.append('Error reading temp from sensor %s (%s)' % (sensor_id, status_match))
-        else:
-            errors.append('Error matching status in %s' % data_file_path)
+                errors.append('Error matching status in %s' % data_file_path)
+            failed_read_attempts += 1
+            time.sleep(2)
 
     temps = [x for x in temps if x is not None]
     if len(temps) == len(config['temp_sensors']):
