@@ -138,9 +138,15 @@ def readSensors():
                 errors.append('Error matching status in %s' % data_file_path)
             failed_read_attempts += 1
             time.sleep(2)
+        if failed_read_attempts >= 5:
+            errors.append('5 failed read attempts for %s' % sensor_config['name'])
 
     if 'NaN' in temps:
         errors.append('One or more temperature sensors missing')
+        working_sensors = [os.path.basename(x) for x in glob.glob('/sys/bus/w1/devices/28-*')]
+        missing_sensors = [x for x in config['temp_sensors'].keys() if x not in working_sensors]
+        for x in missing_sensors:
+            errors.append('%s sensor missing' % config['temp_sensors'][x]['name']
     
     rrd_path = os.path.join(DIR, 'database', 'temp.rrd')
     temp_values = ':'.join(map(str, temps))
