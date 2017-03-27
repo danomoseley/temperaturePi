@@ -99,7 +99,7 @@ def addTemp(serial_code, value):
 
 def readSensors():
     errors = []
-    temps = [None]*(len(config['temp_sensors'])+1)
+    temps = ['NaN']*len(config['temp_sensors'])
     for file_path in glob.glob('/sys/bus/w1/devices/28-*'):
         sensor_id = os.path.basename(file_path)
         if sensor_id not in config['temp_sensors']:
@@ -124,7 +124,7 @@ def readSensors():
                         temp_f = (temp_c * 9/5) + 32
                         addTemp(sensor_id, temp_f)
                         rrd_order = config['temp_sensors'][sensor_id]['rrd_order']
-                        temps[rrd_order] = temp_f
+                        temps[rrd_order-1] = temp_f
                         if 'alert_threshold' in sensor_config and sensor_config['alert_threshold']:
                             threshold = sensor_config['alert_threshold']
                             if temp_f < threshold:
@@ -139,16 +139,16 @@ def readSensors():
             failed_read_attempts += 1
             time.sleep(2)
 
-    temps = [x for x in temps if x is not None]
-    if len(temps) == len(config['temp_sensors']):
-        rrd_path = os.path.join(DIR, 'database', 'temp.rrd')
-        temp_values = ':'.join(map(str, temps))
-        command = '/usr/bin/rrdtool update %s N:%s' % (rrd_path, temp_values)
-        status, message = getstatusoutput(command)
-        if status != 0:
-            errors.append('Error running %s - %d - %s' % (command, status, message))
-    else:
-        errors.append('Error processing temperature sensors')
+    if 'NaN' in temps:
+        errors.append('One or more temperature sensors missing')
+    
+    rrd_path = os.path.join(DIR, 'database', 'temp.rrd')
+    temp_values = ':'.join(map(str, temps))
+    command = '/usr/bin/rrdtool update %s N:%s' % (rrd_path, temp_values)
+    status, message = getstatusoutput(command)
+    if status != 0:
+        errors.append('Error running %s - %d - %s' % (command, status, message))
+    
     return errors
 
 def getDailySensorReadingMetrics():
