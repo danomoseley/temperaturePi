@@ -146,7 +146,7 @@ def readSensors():
         working_sensors = [os.path.basename(x) for x in glob.glob('/sys/bus/w1/devices/28-*')]
         missing_sensors = [x for x in config['temp_sensors'].keys() if x not in working_sensors]
         for x in missing_sensors:
-            errors.append('%s sensor missing' % config['temp_sensors'][x]['name']
+            errors.append('%s sensor missing' % config['temp_sensors'][x]['name'])
     
     rrd_path = os.path.join(DIR, 'database', 'temp.rrd')
     temp_values = ':'.join(map(str, temps))
