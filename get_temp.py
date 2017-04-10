@@ -122,13 +122,16 @@ def readSensors():
                         temp_str = temp_re.group(1)
                         temp_c = float(temp_str)/1000
                         temp_f = (temp_c * 9/5) + 32
-                        addTemp(sensor_id, temp_f)
-                        rrd_order = config['temp_sensors'][sensor_id]['rrd_order']
-                        temps[rrd_order-1] = temp_f
-                        if 'alert_threshold' in sensor_config and sensor_config['alert_threshold']:
-                            threshold = sensor_config['alert_threshold']
-                            if temp_f < threshold:
-                                errors.append("%s current temp %s is below threshold of %s" % (sensor_config['name'], temp_f, threshold))
+                        if temp_f > -100:
+                            addTemp(sensor_id, temp_f)
+                            rrd_order = config['temp_sensors'][sensor_id]['rrd_order']
+                            temps[rrd_order-1] = temp_f
+                            if 'alert_threshold' in sensor_config and sensor_config['alert_threshold']:
+                                threshold = sensor_config['alert_threshold']
+                                if temp_f < threshold:
+                                    errors.append("%s current temp %s is below threshold of %s" % (sensor_config['name'], temp_f, threshold))
+                        else:
+                            errors.append("Ignoring erroneous temp: %d" % temp_f)
                         break
                     else:
                         errors.append('Error matching temp in %s' % data_file_path)
