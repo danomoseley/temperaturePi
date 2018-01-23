@@ -31,6 +31,8 @@ http://abyz.co.uk/rpi/pigpio/examples.html#pdif2_DHTXXD
 - chmod 600 config.py
 - Run create_rrd.py
 - sudo apt install python-pip
+- sudo apt install libffi-dev
+- sudo apt-get install libssl-dev
 - pip install paramiko
 - run ssh-keygen
 - Add ~/.ssh/id_rsa.pub to authorized_keys on remote server
