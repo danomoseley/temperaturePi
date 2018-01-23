@@ -22,6 +22,10 @@ http://abyz.co.uk/rpi/pigpio/examples.html#pdif2_DHTXXD
 - ls
 - If the sensors are wired correctly there should be a folder for each sensor with the name 28-xxxx
 - Take note of each sensor ID, this will be needed for config.py
+- Download this repo https://github.com/danomoseley/temperaturePi/archive/master.zip
+- unzip temperaturePi-master.zip
+- mv temperaturePi-master temperaturePi
+- cd temperaturePi
 - Populate config.py using config.sample.py as a guide
 - sudo apt install rrdtool
 - chmod 600 config.py
