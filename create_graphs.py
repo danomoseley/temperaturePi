@@ -15,6 +15,10 @@ humidity_sensors = config['humidity_sensors']
 sorted_humidity_sensor_ids = sorted(humidity_sensors, key=lambda key: humidity_sensors[key]['display_order'])
 sorted_humidity_sensors = [humidity_sensors[k] for k in sorted_humidity_sensor_ids]
 
+lake_temp_sensors = config['lake_temp_sensors']
+sorted_lake_temp_sensor_ids = sorted(lake_temp_sensors, key=lambda key: lake_temp_sensors[key]['display_order'])
+sorted_lake_temp_sensors = [lake_temp_sensors[k] for k in sorted_lake_temp_sensor_ids]
+
 graphs = [
     {
         'rrd_path': os.path.join(DIR, 'database', 'temp.rrd'),
@@ -103,7 +107,51 @@ graphs = [
                 'line_stroke': 8
             }
         ]
-    }
+    },
+    {
+        'rrd_path': os.path.join(DIR, 'database', 'lake_temp.rrd'),
+        'vertical_label': 'Temperature (°F)',
+        'unit': '°',
+        'sensors': sorted_lake_temp_sensors,
+        'variations': [
+            {
+                'filename': 'lake_temp_hourly.png',
+                'title': 'Lake Temperature Last 4 Hours',
+                'start': '-14400'
+            },
+            {
+                'filename': 'lake_temp_daily.png',
+                'title': 'Lake Temperature Last 24 Hours',
+                'start': '-1d'
+            },
+            {
+                'filename': 'lake_temp_weekly.png',
+                'title': 'Weekly Lake Temperature',
+                'start': '-1w'
+            },
+            {
+                'filename': 'lake_temp_monthly.png',
+                'title': 'Monthly Lake Temperature',
+                'start': '-1m'
+            },
+            {
+                'filename': 'lake_temp_yearly.png',
+                'title': 'Yearly Lake Temperature',
+                'start': '-1y'
+            },
+            {
+                'filename': 'lake_temp_daily_mobile.png',
+                'title': 'Lake Temperature Last 24 Hours',
+                'start': '-1d',
+                'title_font': 30,
+                'axis_font': 17,
+                'legend_font': 29,
+                'unit_font': 20,
+                'padding': 4,
+                'line_stroke': 8
+            }
+        ]
+    },
 ]
 
 directory = os.path.join(DIR, 'latest_graphs')

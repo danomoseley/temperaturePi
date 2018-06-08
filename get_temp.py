@@ -10,6 +10,7 @@ import sqlite3
 import time
 from config import config
 from commands import getstatusoutput
+from utils import sendAlertEmail
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 db_filename = 'sensor_values.db'
@@ -49,19 +50,6 @@ def getExceptionInfo(e):
     fname = os.path.split(path)[1]
     fdir = os.path.split(os.path.dirname(path))[1]
     return str(e)+'\n'+''.join(traceback.format_tb(exc_tb))
-
-def sendAlertEmail(errors):
-    username = config['gmail']['username']
-    password = config['gmail']['password']
-    msg = "Subject: [ALERT] %s\n\n%s\n\n%s" % (errors[0], "\n".join(errors), config['gmail']['site_url'])
-    fromaddr = config['gmail']['from_address']
-    toaddrs = config['gmail']['to_addresses']
-
-    server = smtplib.SMTP('smtp.gmail.com:587')
-    server.starttls()
-    server.login(username,password)
-    server.sendmail(fromaddr, toaddrs, msg)
-    server.quit()
 
 def getSensorSerialCodeMap():
     sensors = {}

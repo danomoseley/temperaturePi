@@ -13,6 +13,10 @@ humidity_sensors = config['humidity_sensors']
 sorted_humidity_sensor_ids = sorted(humidity_sensors, key=lambda key: humidity_sensors[key]['rrd_order'])
 sorted_humidity_sensors = [humidity_sensors[k] for k in sorted_humidity_sensor_ids]
 
+lake_temp_sensors = config['lake_temp_sensors']
+sorted_lake_temp_sensor_ids = sorted(lake_temp_sensors, key=lambda key: lake_temp_sensors[key]['rrd_order'])
+sorted_lake_temp_sensors = [lake_temp_sensors[k] for k in sorted_lake_temp_sensor_ids]
+
 directory = os.path.join(DIR, 'database')
 
 if not os.path.exists(directory):
@@ -26,6 +30,10 @@ databases = [
     {
         'rrd_path': os.path.join(directory, 'humidity.rrd'),
         'sensors': sorted_humidity_sensors
+    },
+    {
+        'rrd_path': os.path.join(directory, 'lake_temp.rrd'),
+        'sensors': sorted_lake_temp_sensors
     }
 ]
 
