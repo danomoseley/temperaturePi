@@ -57,4 +57,7 @@ def write_readings_to_rrd():
             sendAlertEmail(errors)
         print '\n'.join(errors)
 
-write_readings_to_rrd()
+lake_temp_sensors_disabled = config.get('lake_temp_sensors_disabled', False)
+if not lake_temp_sensors_disabled:
+    write_readings_to_rrd()
+

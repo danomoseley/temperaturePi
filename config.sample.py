@@ -57,6 +57,7 @@ config = {
             'color': '#66CCFF'
         }
     },
+    'lake_temp_sensors_disabled': False,
     'lake_temp_sensors': {
         'air_temperature': {
             'name': 'Air',
