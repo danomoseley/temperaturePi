@@ -2,6 +2,7 @@ config = {
     'temp_sensors': {
         '28-00043c93b0ff': {
             'name': 'Living Room',
+            'disabled': True,
             'ds_name': 'living_room',
             'alert_threshold': 40,
             'display_order': 1,
