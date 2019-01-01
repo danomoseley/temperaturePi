@@ -7,12 +7,10 @@ import math
 import pprint
 from commands import getstatusoutput
 from utils import sendAlertEmail
+from utils import convert_c_to_f
 from config import config
 
 DIR = os.path.dirname(os.path.realpath(__file__))
-
-def convert_c_to_f(temp_c):
-    return 9.0/5.0 * float(temp_c) + 32.0
 
 def get_readings():
     r  = requests.get("https://wqdatalive.com/project/applet/html/831")

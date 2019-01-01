@@ -15,3 +15,7 @@ def sendAlertEmail(errors):
     server.login(username,password)
     server.sendmail(fromaddr, toaddrs, msg)
     server.quit()
+
+def convert_c_to_f(temp_c):
+    return 9.0/5.0 * float(temp_c) + 32.0
+
