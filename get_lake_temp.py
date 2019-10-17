@@ -13,7 +13,7 @@ from config import config
 DIR = os.path.dirname(os.path.realpath(__file__))
 
 def get_readings():
-    r  = requests.get("https://wqdatalive.com/project/applet/html/831")
+    r  = requests.get("https://v2.wqdatalive.com/project/applet/html/831")
     soup = BeautifulSoup(r.text, "html.parser")
     table = soup.find("table")
 
