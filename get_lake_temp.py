@@ -42,7 +42,8 @@ def write_readings_to_rrd():
 
         for sensor_id in config['lake_temp_sensors']:
             rrd_order = config['lake_temp_sensors'][sensor_id]['rrd_order']
-            temps[rrd_order-1] = readings[sensor_id][0]
+            if sensor_id in readings:
+                temps[rrd_order-1] = readings[sensor_id][0]
 
         rrd_path = os.path.join(DIR, 'database', 'lake_temp.rrd')
         temp_values = ':'.join(map(str, temps))
