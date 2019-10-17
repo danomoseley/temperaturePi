@@ -29,7 +29,8 @@ def get_readings():
                 value = convert_c_to_f(value)
                 units = "f"
             value = math.floor(value*10)/10
-            readings[param] = (value, units)
+            if value > -100 and value < 120:
+                readings[param] = (value, units)
 
     return readings
 
