@@ -5,6 +5,8 @@ http://abyz.co.uk/rpi/pigpio/examples.html#pdif2_DHTXXD
 
 ### SETUP
 - Follow this guide on wiring the sensors to the raspberry pi gpio, using a 4.7k ohm resistor: https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing/hardware
+- Crimp Connector Housing: 2x20-Pin 5-Pack - https://www.pololu.com/product/1992
+- Wires with Pre-Crimped Terminals 10-Pack - https://www.pololu.com/product/1850
 - Download Raspbian image, choose lite version: https://www.raspberrypi.org/downloads/raspbian/
 - Write image to micro-sd: https://www.raspberrypi.org/documentation/installation/installing-images/linux.md
 - Create empty file named ssh on boot partition of micro-sd, this will enable ssh server by default
