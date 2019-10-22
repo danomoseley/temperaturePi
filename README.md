@@ -31,6 +31,7 @@ http://abyz.co.uk/rpi/pigpio/examples.html#pdif2_DHTXXD
 - chmod 600 config.py
 - Run create_rrd.py
 - sudo apt install python-pip libffi-dev libssl-dev
+- pip install -r requirements.txt
 - run ssh-keygen
 - Add ~/.ssh/id_rsa.pub to authorized_keys on remote server
 - Populate crontab using crontab_example.txt as a guide
