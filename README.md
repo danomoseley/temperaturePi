@@ -30,10 +30,7 @@ http://abyz.co.uk/rpi/pigpio/examples.html#pdif2_DHTXXD
 - sudo apt install rrdtool
 - chmod 600 config.py
 - Run create_rrd.py
-- sudo apt install python-pip
-- sudo apt install libffi-dev
-- sudo apt-get install libssl-dev
-- pip install paramiko
+- sudo apt install python-pip libffi-dev libssl-dev
 - run ssh-keygen
 - Add ~/.ssh/id_rsa.pub to authorized_keys on remote server
 - Populate crontab using crontab_example.txt as a guide
