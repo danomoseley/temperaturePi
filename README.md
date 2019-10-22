@@ -1,7 +1,6 @@
 # temperaturePi
 
 https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing/hardware
-http://abyz.co.uk/rpi/pigpio/examples.html#pdif2_DHTXXD
 
 ### SETUP
 - Follow this guide on wiring the sensors to the raspberry pi gpio, using a 4.7k ohm resistor: https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing/hardware
