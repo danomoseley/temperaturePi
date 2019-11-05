@@ -12,7 +12,7 @@ https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-
 - Terminate the temperature sensors using RJ11 6P4C connectors. 
 
 ![RJ11 6P4C connectors](https://github.com/danomoseley/temperaturePi/blob/master/media/connectors.jpeg?raw=true)
-- Use 4 wire phone line, phone couplers, and splitters to connect the network of sensors.
+- Use 4 wire phone line, phone couplers, and female to female splitters to connect the network of sensors.
 
 ![phone wire coupler](https://github.com/danomoseley/temperaturePi/blob/master/media/couplers.jpg?raw=true)
 ![phone wire splitter](https://github.com/danomoseley/temperaturePi/blob/master/media/splitters.jpg?raw=true)
