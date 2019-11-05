@@ -8,14 +8,14 @@ https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-
 - Wires with Pre-Crimped Terminals 10-Pack - https://www.pololu.com/product/1850
 - Run the pre-crimped terminals to a multi-port surface mount jack, this makes for a more durable connection and a place to wire the pullup resistor
 
-![multi-port surface mount phone jack](https://www.summitsource.com/Assets/ProductImages/AC146W.jpg)
+![multi-port surface mount phone jack](https://github.com/danomoseley/temperaturePi/blob/master/media/surface_mount_jack.jpg?raw=true)
 - Terminate the temperature sensors using RJ11 6P4C connectors. 
 
-![RJ11 6P4C connectors](https://i5.walmartimages.com/asr/b59866db-6b71-458d-9d5b-045aa67a5394_1.482ac3da466758749067ef6aba30275f.jpeg?odnHeight=450&odnWidth=450&odnBg=FFFFFF)
+![RJ11 6P4C connectors](https://github.com/danomoseley/temperaturePi/blob/master/media/connectors.jpeg?raw=true)
 - Use 4 wire phone line, phone couplers, and splitters to connect the network of sensors.
 
-![phone wire coupler](https://images-na.ssl-images-amazon.com/images/I/41cr3SQTGGL._SX342_.jpg)
-![phone wire splitter](https://images-na.ssl-images-amazon.com/images/I/41lVgU8ltSL._SX385_.jpg)
+![phone wire coupler](https://github.com/danomoseley/temperaturePi/blob/master/media/couplers.jpg?raw=true)
+![phone wire splitter](https://github.com/danomoseley/temperaturePi/blob/master/media/splitters.jpg?raw=true)
 
 ### SETUP
 - Download Raspbian image, choose lite version: https://www.raspberrypi.org/downloads/raspbian/
