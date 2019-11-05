@@ -2,10 +2,22 @@
 
 https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing/hardware
 
-### SETUP
+### WIRING
 - Follow this guide on wiring the sensors to the raspberry pi gpio, using a 4.7k ohm resistor: https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing/hardware
 - Crimp Connector Housing: 2x20-Pin 5-Pack - https://www.pololu.com/product/1992
 - Wires with Pre-Crimped Terminals 10-Pack - https://www.pololu.com/product/1850
+- Run the pre-crimped terminals to a multi-port surface mount jack, this makes for a more durable connection and a place to wire the pullup resistor
+
+![multi-port surface mount phone jack](https://www.summitsource.com/Assets/ProductImages/AC146W.jpg)
+- Terminate the temperature sensors using RJ11 6P4C connectors. 
+
+![RJ11 6P4C connectors](https://i5.walmartimages.com/asr/b59866db-6b71-458d-9d5b-045aa67a5394_1.482ac3da466758749067ef6aba30275f.jpeg?odnHeight=450&odnWidth=450&odnBg=FFFFFF)
+- Use 4 wire phone line, phone couplers, and splitters to connect the network of sensors.
+
+![phone wire coupler](https://images-na.ssl-images-amazon.com/images/I/41cr3SQTGGL._SX342_.jpg)
+![phone wire splitter](https://images-na.ssl-images-amazon.com/images/I/41lVgU8ltSL._SX385_.jpg)
+
+### SETUP
 - Download Raspbian image, choose lite version: https://www.raspberrypi.org/downloads/raspbian/
 - Write image to micro-sd: https://www.raspberrypi.org/documentation/installation/installing-images/linux.md
 - Create empty file named ssh on boot partition of micro-sd, this will enable ssh server by default
@@ -37,3 +49,4 @@ https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-
 - Add ~/.ssh/id_rsa.pub to authorized_keys on remote server
 - Populate crontab using crontab_example.txt as a guide
 - Profit
+
