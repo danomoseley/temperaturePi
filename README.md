@@ -39,12 +39,12 @@ https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-
 - unzip temperaturePi-master.zip
 - mv temperaturePi-master temperaturePi
 - cd temperaturePi
-- Populate config.py using config.sample.py as a guide
 - sudo apt install rrdtool
-- chmod 600 config.py
-- Run create_rrd.py
 - sudo apt install python-pip libffi-dev libssl-dev
 - pip install -r requirements.txt
+- Run setup.py
+- chmod 600 config.py
+- Run create_rrd.py
 - run ssh-keygen
 - Add ~/.ssh/id_rsa.pub to authorized_keys on remote server
 - Populate crontab using crontab_example.txt as a guide
