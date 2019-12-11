@@ -11,7 +11,7 @@ https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-
 ![multi-port surface mount phone jack](https://github.com/danomoseley/temperaturePi/blob/master/media/surface_mount_jack.jpg?raw=true)
 
 - Terminate the temperature sensors using RJ12 keystone jacks (https://www.monoprice.com/product?p_id=7296).
-![RJ12 keystone jack](https://github.com/danomoseley/temperaturePi/blob/master/media/keystone.jpeg?raw=true)
+![RJ12 keystone jack](https://github.com/danomoseley/temperaturePi/blob/master/media/keystone.jpg?raw=true)
 
 - Use 4 wire phone line, phone couplers, and female to female splitters to connect the network of sensors.
 
