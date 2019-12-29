@@ -110,7 +110,7 @@ def readSensors():
                         temp_str = temp_re.group(1)
                         temp_c = float(temp_str)/1000
                         temp_f = (temp_c * 9/5) + 32
-                        if temp_f > -100 and temp_f < 120:
+                        if temp_c != 0.0 and temp_f > -100 and temp_f < 120:
                             addTemp(sensor_id, temp_f)
                             rrd_order = config['temp_sensors'][sensor_id]['rrd_order']
                             temps[rrd_order-1] = temp_f
