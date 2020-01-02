@@ -1,7 +1,7 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 import paramiko
 import os
-from commands import getstatusoutput
+from subprocess import getstatusoutput
 from config import config
 
 DIR = os.path.dirname(os.path.realpath(__file__))
@@ -25,4 +25,4 @@ command = "rsync -a --bwlimit=500 %s/latest_graphs/ %s@%s:%s" % (DIR, config['re
 status, message = getstatusoutput(command)
 
 if status != 0:
-    print message
+    print(message)

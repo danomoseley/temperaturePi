@@ -1,11 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from bs4 import BeautifulSoup
 import requests
 import os
 import math
 import pprint
-from commands import getstatusoutput
+from subprocess import getstatusoutput
 from utils import sendAlertEmail
 from utils import convert_c_to_f
 from config import config
@@ -57,7 +57,7 @@ def write_readings_to_rrd():
     if len(errors):
         if 'gmail' in config:
             sendAlertEmail(errors)
-        print '\n'.join(errors)
+        print('\n'.join(errors))
 
 lake_temp_sensors_disabled = config.get('lake_temp_sensors_disabled', False)
 if not lake_temp_sensors_disabled:

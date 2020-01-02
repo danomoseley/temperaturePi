@@ -1,9 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 import os
 import re
 import time
 from config import config
-from commands import getstatusoutput
+from subprocess import getstatusoutput
 from get_temp import sendAlertEmail, getExceptionInfo
 
 DIR = os.path.dirname(os.path.realpath(__file__))
@@ -59,4 +59,4 @@ except Exception, e:
 if len(errors):
     if 'gmail' in config:
         sendAlertEmail(errors)
-    print '\n'.join(errors)
+    print('\n'.join(errors))

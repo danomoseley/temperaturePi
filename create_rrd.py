@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from config import config
 import os
-from commands import getstatusoutput
+from subprocess import getstatusoutput
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -50,8 +50,8 @@ for database in databases:
         #print command
         status, message = getstatusoutput(command)
         if status == 0:
-            print '%s created' % database['rrd_path']
+            print('%s created' % database['rrd_path'])
         else:
-            print 'Error creating %s - %s' % (database['rrd_path'], message)
+            print('Error creating %s - %s' % (database['rrd_path'], message))
     else:
-        print '%s already exists' % database['rrd_path']
+        print('%s already exists' % database['rrd_path'])

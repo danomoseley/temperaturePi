@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 import os
 import sys
@@ -9,7 +9,7 @@ import smtplib
 import sqlite3
 import time
 from config import config
-from commands import getstatusoutput
+from subprocess import getstatusoutput
 from utils import sendAlertEmail
 
 DIR = os.path.dirname(os.path.realpath(__file__))
@@ -154,17 +154,17 @@ def getDailySensorReadingMetrics():
     cur = conn.cursor()
     cur.execute("SELECT * FROM daily_sensor_metrics ORDER BY current desc;")
     colwidth = 15
-    print 'Name'.ljust(colwidth) \
+    print('Name'.ljust(colwidth) \
             +'Current'.ljust(colwidth) \
             +'Average'.ljust(colwidth) \
             +'Min'.ljust(colwidth) \
-            +'Max'.ljust(colwidth)
+            +'Max'.ljust(colwidth))
     for row in cur.fetchall():
-        print row[0].ljust(colwidth) \
+        print(row[0].ljust(colwidth) \
                 + str(row[1]).ljust(colwidth) \
                 + str(row[2]).ljust(colwidth) \
                 + str(row[3]).ljust(colwidth) \
-                + str(row[4]).ljust(colwidth) \
+                + str(row[4]).ljust(colwidth))
 
 if db_is_new:
     provisionDatabase()
@@ -173,12 +173,12 @@ errors = []
 try:
     sensor_errors = readSensors()
     errors.extend(sensor_errors)
-except Exception, e:
+except Exception as e:
     errors.append(getExceptionInfo(e))
 
 if len(errors):
     if 'gmail' in config:
         sendAlertEmail(errors)
-    print '\n'.join(errors)
+    print('\n'.join(errors))
 
 #getDailySensorReadingMetrics()

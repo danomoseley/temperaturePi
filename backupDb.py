@@ -1,7 +1,7 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 from config import config
 import os
-from commands import getstatusoutput
+from subprocess import getstatusoutput
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -11,10 +11,10 @@ command = "rsync -a --bwlimit=500 %s/database/ %s@%s:%s" % (DIR, config['remote'
     config['remote']['host'], remote_path)
 status, message = getstatusoutput(command)
 if status != 0:
-    print message
+    print(message)
 
 command = "rsync -a --bwlimit=500 %s/config.py %s@%s:%s" % (DIR, config['remote']['user'], \
     config['remote']['host'], config['remote']['path'])
 status, message = getstatusoutput(command)
 if status != 0:
-    print message
+    print(message)

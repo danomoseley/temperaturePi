@@ -1,9 +1,9 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 import os
 from config import config
 import collections
-from commands import getstatusoutput
+from subprocess import getstatusoutput
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -221,7 +221,7 @@ for graph in graphs:
             command += '''"COMMENT:\\n" \\
                 "COMMENT:$(date "+%m/%d/%y %l:%M %p" | sed 's/:/\\\:/g')"'''
 
-            #print command
+            #print(command)
             status = getstatusoutput(command)
 
-            print status
+            print(status)
