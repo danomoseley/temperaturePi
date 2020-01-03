@@ -7,7 +7,11 @@ config = {
             'alert_threshold': 40,
             'display_order': 1,
             'rrd_order': 5,
-            'color': '#66CCFF'
+            'color': '#66CCFF',
+            'thermostat_enabled': False,
+            'thermostat_target': 50,
+            'thermostat_temp_variance': 5,
+            'heat_smart_plug_ip': '192.168.1.121'
         },
         '28-00043c939cff': {
             'name': 'Bedroom',

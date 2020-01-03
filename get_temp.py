@@ -11,6 +11,7 @@ import time
 from config import config
 from subprocess import getstatusoutput
 from utils import sendAlertEmail
+from thermostat import runThermostat
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 db_filename = 'sensor_values.db'
@@ -112,6 +113,7 @@ def readSensors():
                         temp_f = (temp_c * 9/5) + 32
                         if temp_c != 0.0 and temp_f > -100 and temp_f < 120:
                             addTemp(sensor_id, temp_f)
+                            runThermostat(sensor_config, temp_f)
                             rrd_order = config['temp_sensors'][sensor_id]['rrd_order']
                             temps[rrd_order-1] = temp_f
                             if 'alert_threshold' in sensor_config and sensor_config['alert_threshold']:
