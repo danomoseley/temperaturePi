@@ -152,7 +152,8 @@ def readSensors():
         errors.append('Error running %s - %d - %s' % (command, status, message))
 
     if thermostat_data:
-        runThermostat(thermostat_data)
+        thermostat_errors = runThermostat(thermostat_data)
+        errors = errors + thermostat_errors
     
     return errors
 

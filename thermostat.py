@@ -3,6 +3,7 @@
 from pyHS100 import SmartPlug
 
 def runThermostat(thermostat_data):
+    errors = []
     heat_plugs = {}
     for thermostat_reading in thermostat_data:
         sensor_config = thermostat_reading['sensor_config']
@@ -28,8 +29,14 @@ def runThermostat(thermostat_data):
     for heat_smart_plug_ip, turn_on_heat_plug in heat_plugs.items():
         if turn_on_heat_plug is not None:
             heat_plug = SmartPlug(heat_smart_plug_ip)
+            heat_plug_state = heat_plug.state
+
             if turn_on_heat_plug:
-                heat_plug.turn_on()
+                if heat_plug_state is 'OFF':
+                    heat_plug.turn_on()
             else:
-                heat_plug.turn_off()
+                if heat_plug_state is 'ON':
+                    heat_plug.turn_off()
+
+    return errors
 
