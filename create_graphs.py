@@ -32,24 +32,20 @@ graphs = [
                 'start': '-14400'
             },
             {
+                'filename': 'temp_hourly_mobile.png',
+                'title': 'Temperature Last 4 Hours',
+                'start': '-14400',
+                'title_font': 30,
+                'axis_font': 17,
+                'legend_font': 29,
+                'unit_font': 20,
+                'padding': 4,
+                'line_stroke': 8
+            },
+            {
                 'filename': 'temp_daily.png',
                 'title': 'Temperature Last 24 Hours',
                 'start': '-1d'
-            },
-            {
-                'filename': 'temp_weekly.png',
-                'title': 'Weekly Temperature',
-                'start': '-1w'
-            },
-            {
-                'filename': 'temp_monthly.png',
-                'title': 'Monthly Temperature',
-                'start': '-1m'
-            },
-            {
-                'filename': 'temp_yearly.png',
-                'title': 'Yearly Temperature',
-                'start': '-1y'
             },
             {
                 'filename': 'temp_daily_mobile.png',
@@ -61,8 +57,56 @@ graphs = [
                 'unit_font': 20,
                 'padding': 4,
                 'line_stroke': 8
-            }
-        ]
+            },
+            {
+                'filename': 'temp_weekly.png',
+                'title': 'Weekly Temperature',
+                'start': '-1w'
+            },
+            {
+                'filename': 'temp_weekly_mobile.png',
+                'title': 'Weekly Temperature',
+                'start': '-1w',
+                'title_font': 30,
+                'axis_font': 17,
+                'legend_font': 29,
+                'unit_font': 20,
+                'padding': 4,
+                'line_stroke': 8
+            },
+            {
+                'filename': 'temp_monthly.png',
+                'title': 'Monthly Temperature',
+                'start': '-1m'
+            },
+            {
+                'filename': 'temp_monthly_mobile.png',
+                'title': 'Monthly Temperature',
+                'start': '-1m',
+                'title_font': 30,
+                'axis_font': 17,
+                'legend_font': 29,
+                'unit_font': 20,
+                'padding': 4,
+                'line_stroke': 8
+            },
+            {
+                'filename': 'temp_yearly.png',
+                'title': 'Yearly Temperature',
+                'start': '-1y'
+            },
+            {
+                'filename': 'temp_yearly_mobile.png',
+                'title': 'Yearly Temperature',
+                'start': '-1y',
+                'title_font': 30,
+                'axis_font': 17,
+                'legend_font': 29,
+                'unit_font': 20,
+                'padding': 4,
+                'line_stroke': 8
+            },
+       ]
     },
     {
         'rrd_path': os.path.join(DIR, 'database', 'humidity.rrd'),
