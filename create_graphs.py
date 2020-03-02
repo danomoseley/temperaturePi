@@ -265,6 +265,12 @@ for graph in graphs:
             command += '''"COMMENT:\\n" \\
                 "COMMENT:$(date "+%m/%d/%y %l:%M %p" | sed 's/:/\\\:/g')"'''
 
+            if graph_variation['title'] == "Temperature Last 24 Hours":
+                if config["thermostat_away"]:
+                    command += "' | AWAY'"
+                if config["thermostat_out"]:
+                    command += "' | OUT'"
+
             #print(command)
             status = getstatusoutput(command)
 
