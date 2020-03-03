@@ -1,5 +1,4 @@
 #!/usr/bin/python3
-import paramiko
 import os
 from subprocess import getstatusoutput
 from config import config
