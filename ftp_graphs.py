@@ -17,12 +17,11 @@ if os.path.isfile(os.path.join(DIR, 'database', 'lake_temp.rrd')):
 
 getstatusoutput(os.path.join(DIR, 'create_graphs.py'))
 
-remote_path = os.path.join(config['remote']['path'], 'latest_graphs')
-
-command = "rsync -a --bwlimit=500 %s/latest_graphs/ %s@%s:%s" % (DIR, config['remote']['user'], \
-    config['remote']['host'], remote_path)
+s3_path = config['s3']
+command = "/usr/local/bin/aws s3 sync --quiet %s/latest_graphs/ %s/latest_graphs/ --cache-control max-age=0" % (DIR, s3_path)
 
 status, message = getstatusoutput(command)
 
 if status != 0:
     print(message)
+
