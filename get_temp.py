@@ -114,7 +114,8 @@ def readSensors():
                         temp_f = (temp_c * 9/5) + 32
                         if temp_c != 0.0 and temp_f > -100 and temp_f < 120:
                             addTemp(sensor_id, temp_f)
-                            thermostat_data.append({'sensor_config':sensor_config, 'current_temp_f':temp_f})
+                            if sensor_config.get("thermostat_enabled", False):
+                                thermostat_data.append({'sensor_config':sensor_config, 'current_temp_f':temp_f})
                             rrd_order = config['temp_sensors'][sensor_id]['rrd_order']
                             temps[rrd_order-1] = temp_f
                             if 'alert_threshold' in sensor_config and sensor_config['alert_threshold']:

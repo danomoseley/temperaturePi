@@ -266,9 +266,9 @@ for graph in graphs:
                 "COMMENT:$(date "+%m/%d/%y %l:%M %p" | sed 's/:/\\\:/g')"'''
 
             if graph_variation['title'] == "Temperature Last 24 Hours":
-                if config["thermostat_away"]:
+                if config.get("thermostat_away", False):
                     command += "' | AWAY'"
-                if config["thermostat_out"]:
+                if config.get("thermostat_out", False):
                     command += "' | OUT'"
 
             #print(command)
