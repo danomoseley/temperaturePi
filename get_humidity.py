@@ -16,7 +16,7 @@ def readHumiditySensors():
         getstatusoutput('sudo pigpiod')
 
     sensor_readings = [None]*(len(config['humidity_sensors'])+1)
-    for gpio_pin, sensor in config['humidity_sensors'].iteritems():
+    for gpio_pin, sensor in config['humidity_sensors'].items():
         failed_attempts = 0;
         readings = []
         while failed_attempts < 5:
@@ -53,7 +53,7 @@ errors = []
 try:
     sensor_errors = readHumiditySensors()
     errors.extend(sensor_errors)
-except Exception, e:
+except Exception as e:
     errors.append(getExceptionInfo(e))
 
 if len(errors):
