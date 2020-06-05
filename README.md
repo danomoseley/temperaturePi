@@ -1,28 +1,30 @@
 # temperaturePi
 
-https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing/hardware
-
 ### WIRING
-- Follow this guide on wiring the sensors to the raspberry pi gpio, using a 4.7k ohm resistor: https://learn.adafruit.com/adafruits-raspberry-pi-lesson-11-ds18b20-temperature-sensing/hardware
+- RJ12 (6P6C) connections and wire has 6 connectors which supports any number of temperature sensors plus 3 total humidity sensors. If you will never have more than 1 humidity sensor you can use RJ11 (6P4C) connections and wire, which only has 4 wires. 
 - Crimp Connector Housing: 2x20-Pin 5-Pack - https://www.pololu.com/product/1992
 - Wires with Pre-Crimped Terminals 10-Pack - https://www.pololu.com/product/1850
-- Run the pre-crimped terminals to a multi-port surface mount jack, this makes for a more durable connection and a place to wire the pullup resistor
+- Run the pre-crimped terminals to a multi-port RJ12 6P6C surface mount jack, this makes for a more durable connection and a place to wire the pullup resistor.
+- GPIO pin 1 -> Red
+- GPIO pin 6 -> Black
+- GPIO pin 7 -> Yellow
+- 4.7k ohm pullup resistor between red and yellow
 
-![multi-port surface mount phone jack](https://github.com/danomoseley/temperaturePi/blob/master/media/surface_mount_jack.jpg?raw=true)
+![multi-port surface mount phone jack](https://github.com/danomoseley/temperaturePi/blob/master/media/surface_mount_jack_multi.jpg?raw=true)
 
-- Terminate the temperature sensors using RJ12 keystone jacks (https://www.monoprice.com/product?p_id=7296).
-![RJ12 keystone jack](https://github.com/danomoseley/temperaturePi/blob/master/media/keystone.jpg?raw=true)
+- Terminate the temperature sensors using RJ12 6P6C surface mount jacks (https://www.cablesandkits.com/ethernet/surface-mount-boxes/rj11-rj12/rj12surfbox-1-wh/pro-3777/)
 
-- Use 4 wire phone line, phone couplers, and female to female splitters to connect the network of sensors.
+![rj12 surface mount phone jack](https://github.com/danomoseley/temperaturePi/blob/master/media/surface_mount_jack.jpg?raw=true)
+
+- Use 6 wire phone line and female to female splitters to connect the network of sensors.
 
 ![RJ11 6P4C connectors](https://github.com/danomoseley/temperaturePi/blob/master/media/connectors.jpeg?raw=true)
-![phone wire coupler](https://github.com/danomoseley/temperaturePi/blob/master/media/couplers.jpg?raw=true)
 ![phone wire splitter](https://github.com/danomoseley/temperaturePi/blob/master/media/splitters.jpg?raw=true)
 
 ### SETUP
 - Download Raspbian image, choose lite version: https://www.raspberrypi.org/downloads/raspbian/
 - Write image to micro-sd: https://www.raspberrypi.org/documentation/installation/installing-images/linux.md
-- Create empty file named ssh on boot partition of micro-sd, this will enable ssh server by default
+- Create empty file named `ssh` on boot partition of micro-sd, this will enable ssh server by default
 - Hard wire the network of the raspberry pi, boot, and find the local ip of the pi on the router
 - ssh pi@llocal-ip-address, password raspberry
 - run raspi-config and change the hostname to temperaturePi
