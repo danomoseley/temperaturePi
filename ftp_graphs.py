@@ -20,7 +20,7 @@ getstatusoutput(os.path.join(DIR, 'create_graphs.py'))
 expires = datetime.utcnow() + timedelta(minutes=5)
 
 s3_path = config['s3']
-command = "/usr/local/bin/aws s3 sync --quiet %s/latest_graphs/ %s/latest_graphs/ --expires '%s'" % (DIR, s3_path, expires.isoformat())
+command = "/usr/local/bin/aws s3 cp --recursive --quiet %s/latest_graphs/ %s/latest_graphs/ --expires '%s'" % (DIR, s3_path, expires.isoformat())
 
 status, message = getstatusoutput(command)
 
