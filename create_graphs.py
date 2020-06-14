@@ -4,6 +4,7 @@ import os
 from config import config
 import collections
 from subprocess import getstatusoutput
+import time
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -247,6 +248,7 @@ directory = os.path.join(DIR, 'latest_graphs')
 if not os.path.exists(directory):
     os.makedirs(directory)
 
+overall_tic = time.perf_counter()
 for graph in graphs:
     if os.path.isfile(graph['rrd_path']) and len(graph['sensors']):
         max_name_length = 0
@@ -316,6 +318,12 @@ for graph in graphs:
                     command += "' | OUT'"
 
             #print(command)
+            tic = time.perf_counter()
             status = getstatusoutput(command)
+            toc = time.perf_counter()
+            print(f"{graph_variation['filename']} took {toc - tic:0.4f} seconds")
 
             print(status)
+
+overall_toc = time.perf_counter()
+print(f"Graph generation took {overall_toc - overall_tic:0.4f} seconds")
