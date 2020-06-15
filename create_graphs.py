@@ -10,15 +10,15 @@ DIR = os.path.dirname(os.path.realpath(__file__))
 
 temp_sensors = config['temp_sensors']
 sorted_temp_sensor_ids = sorted(temp_sensors, key=lambda key: temp_sensors[key]['display_order'])
-sorted_temp_sensors = [temp_sensors[k] for k in sorted_temp_sensor_ids]
+sorted_temp_sensors = [temp_sensors[k] for k in sorted_temp_sensor_ids if not temp_sensors[k].get('disabled', False)]
 
 humidity_sensors = config['humidity_sensors']
 sorted_humidity_sensor_ids = sorted(humidity_sensors, key=lambda key: humidity_sensors[key]['display_order'])
-sorted_humidity_sensors = [humidity_sensors[k] for k in sorted_humidity_sensor_ids]
+sorted_humidity_sensors = [humidity_sensors[k] for k in sorted_humidity_sensor_ids if not humidity_sensors[k].get('disabled', False)]
 
 lake_temp_sensors = config['lake_temp_sensors']
 sorted_lake_temp_sensor_ids = sorted(lake_temp_sensors, key=lambda key: lake_temp_sensors[key]['display_order'])
-sorted_lake_temp_sensors = [lake_temp_sensors[k] for k in sorted_lake_temp_sensor_ids]
+sorted_lake_temp_sensors = [lake_temp_sensors[k] for k in sorted_lake_temp_sensor_ids if not lake_temp_sensors[k].get('disabled', False)]
 
 graphs = [
     {
