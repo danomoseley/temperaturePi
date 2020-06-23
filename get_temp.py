@@ -10,7 +10,7 @@ import sqlite3
 import time
 from config import config
 from subprocess import getstatusoutput
-from utils import sendAlertEmail
+from utils import sendAlertEmail, getExceptionInfo
 from thermostat import runThermostat
 
 DIR = os.path.dirname(os.path.realpath(__file__))
@@ -44,13 +44,6 @@ def populateInitialSensorData():
                         (?, ?)',
                         (serial_code, name))
         conn.commit()
-
-def getExceptionInfo(e):
-    exc_type, exc_obj, exc_tb = sys.exc_info()
-    path = exc_tb.tb_frame.f_code.co_filename
-    fname = os.path.split(path)[1]
-    fdir = os.path.split(os.path.dirname(path))[1]
-    return str(e)+'\n'+''.join(traceback.format_tb(exc_tb))
 
 def getSensorSerialCodeMap():
     sensors = {}

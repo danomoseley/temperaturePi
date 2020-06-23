@@ -19,3 +19,10 @@ def sendAlertEmail(errors):
 def convert_c_to_f(temp_c):
     return 9.0/5.0 * float(temp_c) + 32.0
 
+def getExceptionInfo(e):
+    exc_type, exc_obj, exc_tb = sys.exc_info()
+    path = exc_tb.tb_frame.f_code.co_filename
+    fname = os.path.split(path)[1]
+    fdir = os.path.split(os.path.dirname(path))[1]
+    return str(e)+'\n'+''.join(traceback.format_tb(exc_tb))
+

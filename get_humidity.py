@@ -4,7 +4,7 @@ import re
 import time
 from config import config
 from subprocess import getstatusoutput
-from get_temp import sendAlertEmail, getExceptionInfo
+from utils import sendAlertEmail, getExceptionInfo
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 
