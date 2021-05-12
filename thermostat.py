@@ -13,7 +13,8 @@ def runThermostat(thermostat_data):
     away = config["thermostat_away"]
 
     heat_plugs = {}
-    now = datetime.now()
+    is_day = datetime.now().hour in range(8,22)
+
     for thermostat_reading in thermostat_data:
         sensor_config = thermostat_reading['sensor_config']
         current_temp_f = thermostat_reading['current_temp_f']
@@ -58,18 +59,19 @@ def runThermostat(thermostat_data):
                         verbose_errors.append("Using thermostat out variance setting")
                         temp_variance = sensor["thermostat_temp_variance_out"]
             else:
-                if now.hour > 6 and "thermostat_target_day" in sensor:
+                if is_day and "thermostat_target_day" in sensor:
                     verbose_errors.append("Using thermostat day temp setting")
                     target_temp = sensor["thermostat_target_day"]
+                    if sensor["smart_plug_mode"] == 'cool' and "thermostat_target_day_cool" in sensor:
+                        target_temp = sensor["thermostat_target_day_cool"]
+
                     if "thermostat_temp_variance_day" in sensor:
                         verbose_errors.append("Using thermostat day variance setting")
                         temp_variance = sensor["thermostat_temp_variance_day"]
-                elif now.hour < 6 and "thermostat_target_night" in sensor:
+                elif not is_day and "thermostat_target_night" in sensor:
                     verbose_errors.append("Using calculated thermostat night temp target")
-                    #target_temp = sensor["thermostat_target_night"]
-                    if sensor["smart_plug_mode"] == 'heat':
-                        target_temp = sensor["thermostat_target_night"]
-                    elif sensor["smart_plug_mode"] == 'cool':
+                    target_temp = sensor["thermostat_target_night"]
+                    if sensor["smart_plug_mode"] == 'cool' and "thermostat_target_night_cool" in sensor:
                         target_temp = sensor["thermostat_target_night_cool"]
 
                     if "thermostat_temp_variance_night" in sensor:
@@ -78,9 +80,6 @@ def runThermostat(thermostat_data):
 
             verbose_errors.append("Current Temp: "+str(round(sensor["current_temp_f"],2)))
             verbose_errors.append("Thermostat Target: "+str(target_temp))
-
-            if 'smart_plug_mode' not in sensor:
-                sensor['smart_plug_mode'] = 'heat'
 
             if sensor['smart_plug_mode'] == 'cool':
                 on_temp = target_temp + (temp_variance/2)
@@ -109,17 +108,31 @@ def runThermostat(thermostat_data):
 
         heat_plug = SmartPlug(heat_smart_plug_ip)
         heat_plug_state = heat_plug.state
+        
+        secondary_smart_plug=False
+        #secondary_smart_plug = SmartPlug("192.168.2.106")
+
         verbose_errors.append("")
         verbose_errors.append("Sensors calling for heat: "+str(sensors_calling_for_heat))
         verbose_errors.append("Sensors satisfied: "+str(sensors_satisfied))
         verbose_errors.append("Total sensors: "+str(len(monitored_sensors)))
         verbose_errors.append("Heat plug: "+heat_plug_state)
+        if secondary_smart_plug:
+            verbose_errors.append("Secondary smart plug: "+secondary_smart_plug.state)
+
         if sensors_calling_for_heat:
             if heat_plug_state is 'OFF':
                 verbose_errors.append("Turning on heater")
                 heat_plug.turn_on()
+            if secondary_smart_plug:
+                if is_day and heat_plug_state is 'ON' and secondary_smart_plug.state is 'OFF':
+                    verbose_errors.append("Turning on secondary smart plug")
+                    secondary_smart_plug.turn_on()
         elif sensors_satisfied == len(monitored_sensors):
-            if heat_plug_state is 'ON':
+            if secondary_smart_plug and secondary_smart_plug.state is 'ON':
+                verbose_errors.append("Turning off secondary smart plug")
+                secondary_smart_plug.turn_off()
+            elif heat_plug_state is 'ON':
                 verbose_errors.append("Turning off heater")
                 heat_plug.turn_off()
 
