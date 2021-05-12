@@ -3,11 +3,16 @@
 from config import config
 import smtplib
 import sqlite3
+from datetime import datetime
+import sys, os, traceback
 
 def sendAlertEmail(errors):
     username = config['gmail']['username']
     password = config['gmail']['password']
-    msg = "Subject: [ALERT] %s\n\n%s\n\n%s" % (errors[0], "\n".join(errors), config['gmail']['site_url'])
+
+    d = datetime.now().strftime("%m/%d/%Y, %H:%M:%S.%f")
+
+    msg = "Subject: [ALERT] %s\n\n%s\n\n%s\n\n%s" % (errors[0], "\n".join(errors), config['gmail']['site_url'], d)
     fromaddr = config['gmail']['from_address']
     toaddrs = config['gmail']['to_addresses']
 
