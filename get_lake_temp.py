@@ -24,7 +24,7 @@ def set_buoy_offline(offline=True):
     f.write('config = %s' % pp.pformat(config))
 
 def get_readings():
-    r  = requests.get("https://v2.wqdatalive.com/project/applet/html/831")
+    r  = requests.get("https://v2.wqdatalive.com/project/applet/html/831",  verify=False)
     soup = BeautifulSoup(r.text, "html.parser")
     table = soup.find("table")
 
