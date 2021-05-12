@@ -389,24 +389,20 @@ graphs = [
                 'start': '-14400'
             },
             {
+                'filename': 'lake_temp_hourly_mobile.png',
+                'title': 'Lake Temperature Last 4 Hours',
+                'start': '-14400',
+                'title_font': 30,
+                'axis_font': 17,
+                'legend_font': 29,
+                'unit_font': 20,
+                'padding': 4,
+                'line_stroke': 8
+            },
+            {
                 'filename': 'lake_temp_daily.png',
                 'title': 'Lake Temperature Last 24 Hours',
                 'start': '-1d'
-            },
-            {
-                'filename': 'lake_temp_weekly.png',
-                'title': 'Weekly Lake Temperature',
-                'start': '-1w'
-            },
-            {
-                'filename': 'lake_temp_monthly.png',
-                'title': 'Monthly Lake Temperature',
-                'start': '-1m'
-            },
-            {
-                'filename': 'lake_temp_yearly.png',
-                'title': 'Yearly Lake Temperature',
-                'start': '-1y'
             },
             {
                 'filename': 'lake_temp_daily_mobile.png',
@@ -418,7 +414,55 @@ graphs = [
                 'unit_font': 20,
                 'padding': 4,
                 'line_stroke': 8
-            }
+            },
+            {
+                'filename': 'lake_temp_weekly.png',
+                'title': 'Weekly Lake Temperature',
+                'start': '-1w'
+            },
+            {
+                'filename': 'lake_temp_weekly_mobile.png',
+                'title': 'Weekly Lake Temperature',
+                'start': '-1w',
+                'title_font': 30,
+                'axis_font': 17,
+                'legend_font': 29,
+                'unit_font': 20,
+                'padding': 4,
+                'line_stroke': 8
+            },
+            {
+                'filename': 'lake_temp_monthly.png',
+                'title': 'Monthly Lake Temperature',
+                'start': '-1m'
+            },
+            {
+                'filename': 'lake_temp_monthly_mobile.png',
+                'title': 'Monthly Lake Temperature',
+                'start': '-1m',
+                'title_font': 30,
+                'axis_font': 17,
+                'legend_font': 29,
+                'unit_font': 20,
+                'padding': 4,
+                'line_stroke': 8
+            },
+            {
+                'filename': 'lake_temp_yearly.png',
+                'title': 'Yearly Lake Temperature',
+                'start': '-1y'
+            },
+            {
+                'filename': 'lake_temp_yearly_mobile.png',
+                'title': 'Yearly Lake Temperature',
+                'start': '-1y',
+                'title_font': 30,
+                'axis_font': 17,
+                'legend_font': 29,
+                'unit_font': 20,
+                'padding': 4,
+                'line_stroke': 8
+            },
         ]
     },
 ]
