@@ -11,29 +11,19 @@ import time
 from config import config
 from subprocess import getstatusoutput
 from utils import sendAlertEmail, getExceptionInfo
+from utils import dbConnection
 from thermostat import runThermostat
-
-DIR = os.path.dirname(os.path.realpath(__file__))
-db_filename = 'sensor_values.db'
-db_filepath = os.path.join(DIR, 'database', db_filename)
-
-db_is_new = not os.path.exists(db_filepath)
-conn = sqlite3.connect(db_filepath)
-
-modules = open('/proc/modules').read()
-if 'w1_therm' not in modules:
-    getstatusoutput('sudo modprobe w1-therm')
-if 'w1_gpio' not in modules:
-    getstatusoutput('sudo modprobe w1-gpio')
 
 def provisionDatabase():
     schema_filepath = os.path.join(DIR, 'sensor_values_schema.sql')
     with open(schema_filepath, 'rt') as f:
         schema = f.read()
+        conn = dbConnection()
         conn.executescript(schema)
     populateInitialSensorData()
 
 def populateInitialSensorData():
+    conn = dbConnection()
     cur = conn.cursor()
     for serial_code in config['temp_sensors']:
         sensor = config['temp_sensors'][serial_code]
@@ -47,6 +37,7 @@ def populateInitialSensorData():
 
 def getSensorSerialCodeMap():
     sensors = {}
+    conn = dbConnection()
     cur = conn.cursor()
     cur.execute('SELECT \
                      id, serial_code, name \
@@ -60,6 +51,7 @@ def getSensorSerialCodeMap():
     return sensors
 
 def getSensorBySerialCode(serial_code):
+    conn = dbConnection()
     cur = conn.cursor()
     cur.execute('SELECT \
                      id, serial_code, name \
@@ -74,6 +66,7 @@ def getSensorBySerialCode(serial_code):
 
 def addTemp(serial_code, value):
     sensor = getSensorBySerialCode(serial_code)
+    conn = dbConnection()
     cur = conn.cursor()
     cur.execute('INSERT INTO sensor_readings (sensor_id, value) VALUES (?, ?)',
                     (sensor['id'], value))
@@ -83,6 +76,13 @@ def readSensors():
     errors = []
     temps = ['NaN']*len(config['temp_sensors'])
     thermostat_data = []
+
+    modules = open('/proc/modules').read()
+    if 'w1_therm' not in modules:
+        getstatusoutput('sudo modprobe w1-therm')
+    if 'w1_gpio' not in modules:
+        getstatusoutput('sudo modprobe w1-gpio')
+
     for file_path in glob.glob('/sys/bus/w1/devices/28-*'):
         sensor_id = os.path.basename(file_path)
         if sensor_id not in config['temp_sensors']:
@@ -152,6 +152,7 @@ def readSensors():
     return errors
 
 def getDailySensorReadingMetrics():
+    conn = dbConnection()
     cur = conn.cursor()
     cur.execute("SELECT * FROM daily_sensor_metrics ORDER BY current desc;")
     colwidth = 15
@@ -167,19 +168,25 @@ def getDailySensorReadingMetrics():
                 + str(row[3]).ljust(colwidth) \
                 + str(row[4]).ljust(colwidth))
 
-if db_is_new:
-    provisionDatabase()
+if __name__ == '__main__':
+    DIR = os.path.dirname(os.path.realpath(__file__))
+    db_filename = 'sensor_values.db'
+    db_filepath = os.path.join(DIR, 'database', db_filename)
+    db_is_new = not os.path.exists(db_filepath)
 
-errors = []
-try:
-    sensor_errors = readSensors()
-    errors.extend(sensor_errors)
-except Exception as e:
-    errors.append(getExceptionInfo(e))
+    if db_is_new:
+        provisionDatabase()
 
-if len(errors):
-    if 'gmail' in config:
-        sendAlertEmail(errors)
-    print('\n'.join(errors))
+    errors = []
+    try:
+        sensor_errors = readSensors()
+        errors.extend(sensor_errors)
+    except Exception as e:
+        errors.append(getExceptionInfo(e))
 
-#getDailySensorReadingMetrics()
+    if len(errors):
+        if 'gmail' in config:
+            sendAlertEmail(errors)
+        print('\n'.join(errors))
+
+    #getDailySensorReadingMetrics()

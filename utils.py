@@ -2,6 +2,7 @@
 
 from config import config
 import smtplib
+import sqlite3
 
 def sendAlertEmail(errors):
     username = config['gmail']['username']
@@ -26,3 +27,15 @@ def getExceptionInfo(e):
     fdir = os.path.split(os.path.dirname(path))[1]
     return str(e)+'\n'+''.join(traceback.format_tb(exc_tb))
 
+class dbConnection(object):
+    conn = None
+
+    def __new__(cls):
+        if cls.conn is None:
+            cls._instance = super(dbConnection, cls).__new__(cls)
+            DIR = os.path.dirname(os.path.realpath(__file__))
+            db_filename = 'sensor_values.db'
+            db_filepath = os.path.join(DIR, 'database', db_filename)
+            cls.conn = sqlite3.connect(db_filepath)
+
+        return cls.conn
