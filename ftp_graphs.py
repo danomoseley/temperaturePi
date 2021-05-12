@@ -12,6 +12,9 @@ if os.path.isfile(os.path.join(DIR, 'database', 'temp.rrd')):
 if os.path.isfile(os.path.join(DIR, 'database', 'humidity.rrd')):
     getstatusoutput(os.path.join(DIR, 'get_humidity.py'))
 
+if os.path.isfile(os.path.join(DIR, 'database', 'pressure.rrd')):
+    getstatusoutput(os.path.join(DIR, 'get_pressure.py'))
+
 if os.path.isfile(os.path.join(DIR, 'database', 'lake_temp.rrd')):
     getstatusoutput(os.path.join(DIR, 'get_lake_temp.py'))
 

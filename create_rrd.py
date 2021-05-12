@@ -17,6 +17,10 @@ lake_temp_sensors = config['lake_temp_sensors']
 sorted_lake_temp_sensor_ids = sorted(lake_temp_sensors, key=lambda key: lake_temp_sensors[key]['rrd_order'])
 sorted_lake_temp_sensors = [lake_temp_sensors[k] for k in sorted_lake_temp_sensor_ids]
 
+pressure_sensors = config['pressure_sensors']
+sorted_pressure_sensor_ids = sorted(pressure_sensors, key=lambda key: pressure_sensors[key]['rrd_order'])
+sorted_pressure_sensors = [pressure_sensors[k] for k in sorted_pressure_sensor_ids]
+
 directory = os.path.join(DIR, 'database')
 
 if not os.path.exists(directory):
@@ -34,7 +38,15 @@ databases = [
     {
         'rrd_path': os.path.join(directory, 'lake_temp.rrd'),
         'sensors': sorted_lake_temp_sensors
-    }
+    },
+    {
+        'rrd_path': os.path.join(directory, 'pressure.rrd'),
+        'sensors': sorted_pressure_sensors
+    },
+    {
+        'rrd_path': os.path.join(directory, 'pressure_hpa.rrd'),
+        'sensors': sorted_pressure_sensors
+    },
 ]
 
 for database in databases:

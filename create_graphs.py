@@ -16,6 +16,10 @@ humidity_sensors = config['humidity_sensors']
 sorted_humidity_sensor_ids = sorted(humidity_sensors, key=lambda key: humidity_sensors[key]['display_order'])
 sorted_humidity_sensors = [humidity_sensors[k] for k in sorted_humidity_sensor_ids if not humidity_sensors[k].get('disabled', False)]
 
+pressure_sensors = config['pressure_sensors']
+sorted_pressure_sensor_ids = sorted(pressure_sensors, key=lambda key: pressure_sensors[key]['display_order'])
+sorted_pressure_sensors = [pressure_sensors[k] for k in sorted_pressure_sensor_ids if not pressure_sensors[k].get('disabled', False)]
+
 lake_temp_sensors = config['lake_temp_sensors']
 sorted_lake_temp_sensor_ids = sorted(lake_temp_sensors, key=lambda key: lake_temp_sensors[key]['display_order'])
 sorted_lake_temp_sensors = [lake_temp_sensors[k] for k in sorted_lake_temp_sensor_ids if not lake_temp_sensors[k].get('disabled', False)]
@@ -108,6 +112,182 @@ graphs = [
                 'line_stroke': 8
             },
        ]
+    },
+    {
+        'rrd_path': os.path.join(DIR, 'database', 'pressure.rrd'),
+        'vertical_label': 'Air Pressure (Inches)',
+        'unit': '"',
+        'sensors': sorted_pressure_sensors,
+        'variations': [
+            {
+                'filename': 'pressure_hourly.png',
+                'title': 'Air Pressure Last 4 Hours',
+                'start': '-14400'
+            },
+            {
+                'filename': 'pressure_hourly_mobile.png',
+                'title': 'Air Pressure Last 4 Hours',
+                'start': '-14400',
+                'title_font': 30,
+                'axis_font': 17,
+                'legend_font': 29,
+                'unit_font': 20,
+                'padding': 4,
+                'line_stroke': 8
+            },
+            {
+                'filename': 'pressure_daily.png',
+                'title': 'Air Pressure Last 24 Hours',
+                'start': '-1d'
+            },
+            {
+                'filename': 'pressure_daily_mobile.png',
+                'title': 'Air Pressure Last 24 Hours',
+                'start': '-1d',
+                'title_font': 30,
+                'axis_font': 17,
+                'legend_font': 29,
+                'unit_font': 20,
+                'padding': 4,
+                'line_stroke': 8
+            },
+            {
+                'filename': 'pressure_weekly.png',
+                'title': 'Weekly Air Pressure',
+                'start': '-1w'
+            },
+            {
+                'filename': 'pressure_weekly_mobile.png',
+                'title': 'Weekly Air Pressure',
+                'start': '-1w',
+                'title_font': 30,
+                'axis_font': 17,
+                'legend_font': 29,
+                'unit_font': 20,
+                'padding': 4,
+                'line_stroke': 8
+            },
+            {
+                'filename': 'pressure_monthly.png',
+                'title': 'Monthly Air Pressure',
+                'start': '-1m'
+            },
+            {
+                'filename': 'pressure_monthly_mobile.png',
+                'title': 'Monthly Air Pressure',
+                'start': '-1m',
+                'title_font': 30,
+                'axis_font': 17,
+                'legend_font': 29,
+                'unit_font': 20,
+                'padding': 4,
+                'line_stroke': 8
+            },
+            {
+                'filename': 'pressure_yearly.png',
+                'title': 'Yearly Air Pressure',
+                'start': '-1y'
+            },
+            {
+                'filename': 'pressure_yearly_mobile.png',
+                'title': 'Yearly Air Pressure',
+                'start': '-1y',
+                'title_font': 30,
+                'axis_font': 17,
+                'legend_font': 29,
+                'unit_font': 20,
+                'padding': 4,
+                'line_stroke': 8
+            },
+        ]
+    },
+    {
+        'rrd_path': os.path.join(DIR, 'database', 'pressure_hpa.rrd'),
+        'vertical_label': 'Air Pressure (hPa)',
+        'unit': 'hPa',
+        'sensors': sorted_pressure_sensors,
+        'variations': [
+            {
+                'filename': 'pressure_hpa_hourly.png',
+                'title': 'Air Pressure Last 4 Hours',
+                'start': '-14400'
+            },
+            {
+                'filename': 'pressure_hpa_hourly_mobile.png',
+                'title': 'Air Pressure Last 4 Hours',
+                'start': '-14400',
+                'title_font': 30,
+                'axis_font': 17,
+                'legend_font': 29,
+                'unit_font': 20,
+                'padding': 4,
+                'line_stroke': 8
+            },
+            {
+                'filename': 'pressure_hpa_daily.png',
+                'title': 'Air Pressure Last 24 Hours',
+                'start': '-1d'
+            },
+            {
+                'filename': 'pressure_hpa_daily_mobile.png',
+                'title': 'Air Pressure Last 24 Hours',
+                'start': '-1d',
+                'title_font': 30,
+                'axis_font': 17,
+                'legend_font': 29,
+                'unit_font': 20,
+                'padding': 4,
+                'line_stroke': 8
+            },
+            {
+                'filename': 'pressure_hpa_weekly.png',
+                'title': 'Weekly Air Pressure',
+                'start': '-1w'
+            },
+            {
+                'filename': 'pressure_hpa_weekly_mobile.png',
+                'title': 'Weekly Air Pressure',
+                'start': '-1w',
+                'title_font': 30,
+                'axis_font': 17,
+                'legend_font': 29,
+                'unit_font': 20,
+                'padding': 4,
+                'line_stroke': 8
+            },
+            {
+                'filename': 'pressure_hpa_monthly.png',
+                'title': 'Monthly Air Pressure',
+                'start': '-1m'
+            },
+            {
+                'filename': 'pressure_hpa_monthly_mobile.png',
+                'title': 'Monthly Air Pressure',
+                'start': '-1m',
+                'title_font': 30,
+                'axis_font': 17,
+                'legend_font': 29,
+                'unit_font': 20,
+                'padding': 4,
+                'line_stroke': 8
+            },
+            {
+                'filename': 'pressure_hpa_yearly.png',
+                'title': 'Yearly Air Pressure',
+                'start': '-1y'
+            },
+            {
+                'filename': 'pressure_hpa_yearly_mobile.png',
+                'title': 'Yearly Air Pressure',
+                'start': '-1y',
+                'title_font': 30,
+                'axis_font': 17,
+                'legend_font': 29,
+                'unit_font': 20,
+                'padding': 4,
+                'line_stroke': 8
+            },
+        ]
     },
     {
         'rrd_path': os.path.join(DIR, 'database', 'humidity.rrd'),
@@ -293,21 +473,39 @@ for graph in graphs:
 
             for sensor in graph['sensors']:
                 display_name = sensor['name'] + '\:'
-                command += '''DEF:%(ds_name)s=%(rrd_path)s:%(ds_name)s:AVERAGE \\
-                    LINE%(line_stroke)d:%(ds_name)s%(color)s:'%(display_name)s' \\
-                    GPRINT:%(ds_name)s:LAST:'%%%(padding)d.1lf%(unit)s' \\
-                    GPRINT:%(ds_name)s:MIN:'%%%(padding)d.1lf%(unit)s' \\
-                    GPRINT:%(ds_name)s:MAX:'%%%(padding)d.1lf%(unit)s' \\
-                    GPRINT:%(ds_name)s:AVERAGE:'%%%(padding)d.1lf%(unit)s\\n' \\
-                    ''' % {
-                            'ds_name': sensor['ds_name'],
-                            'rrd_path': graph['rrd_path'],
-                            'line_stroke': graph_variation['line_stroke'],
-                            'color': sensor['color'],
-                            'display_name': display_name.ljust(max_name_length),
-                            'padding': padding,
-                            'unit': graph['unit']
-                          }
+                
+                if graph['unit'] == '""':
+                    command += '''DEF:%(ds_name)s=%(rrd_path)s:%(ds_name)s:AVERAGE \\
+                        LINE%(line_stroke)d:%(ds_name)s%(color)s:'%(display_name)s' \\
+                        GPRINT:%(ds_name)s:LAST:'%%%(padding)d.2lf%(unit)s' \\
+                        GPRINT:%(ds_name)s:MIN:'%%%(padding)d.2lf%(unit)s' \\
+                        GPRINT:%(ds_name)s:MAX:'%%%(padding)d.2lf%(unit)s' \\
+                        GPRINT:%(ds_name)s:AVERAGE:'%%%(padding)d.2lf%(unit)s\\n' \\
+                        ''' % {
+                                'ds_name': sensor['ds_name'],
+                                'rrd_path': graph['rrd_path'],
+                                'line_stroke': graph_variation['line_stroke'],
+                                'color': sensor['color'],
+                                'display_name': display_name.ljust(max_name_length),
+                                'padding': padding,
+                                'unit': graph['unit']
+                              }
+                else:
+                    command += '''DEF:%(ds_name)s=%(rrd_path)s:%(ds_name)s:AVERAGE \\
+                        LINE%(line_stroke)d:%(ds_name)s%(color)s:'%(display_name)s' \\
+                        GPRINT:%(ds_name)s:LAST:'%%%(padding)d.1lf%(unit)s' \\
+                        GPRINT:%(ds_name)s:MIN:'%%%(padding)d.1lf%(unit)s' \\
+                        GPRINT:%(ds_name)s:MAX:'%%%(padding)d.1lf%(unit)s' \\
+                        GPRINT:%(ds_name)s:AVERAGE:'%%%(padding)d.1lf%(unit)s\\n' \\
+                        ''' % {
+                                'ds_name': sensor['ds_name'],
+                                'rrd_path': graph['rrd_path'],
+                                'line_stroke': graph_variation['line_stroke'],
+                                'color': sensor['color'],
+                                'display_name': display_name.ljust(max_name_length),
+                                'padding': padding,
+                                'unit': graph['unit']
+                              }
             command += '''"COMMENT:\\n" \\
                 "COMMENT:$(date "+%m/%d/%y %l:%M %p" | sed 's/:/\\\:/g')"'''
 

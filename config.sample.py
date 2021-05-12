@@ -62,6 +62,15 @@ config = {
             'color': '#66CCFF'
         }
     },
+    'pressure_sensors': {
+        77: {
+            'name': 'Air Pressure',
+            'ds_name': 'pressure',
+            'display_order': 1,
+            'rrd_order': 1,
+            'color': '#66CCFF'
+        }
+    },
     'lake_temp_sensors_disabled': False,
     'lake_temp_sensors': {
         'air_temperature': {
