@@ -9,7 +9,7 @@ import pprint
 from subprocess import getstatusoutput
 from utils import sendAlertEmail
 from utils import dbConnection
-from utils import convert_c_to_f
+from utils import convert_c_to_f, getExceptionInfo
 from config import config
 
 DIR = os.path.dirname(os.path.realpath(__file__))
@@ -80,7 +80,7 @@ def write_readings_to_rrd(readings):
         status, message = getstatusoutput(command)
         if status != 0:
             errors.append('Error running %s - %d - %s' % (command, status, message))
-    except Exception, e:
+    except Exception as e:
         errors.append(getExceptionInfo(e))
 
     if len(errors):
