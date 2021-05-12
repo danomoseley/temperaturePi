@@ -12,6 +12,15 @@ from config import config
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 
+class BuoyOfflineError(Exception):
+    pass
+
+def set_buoy_offline(offline=True):
+    pp = pprint.PrettyPrinter(indent=4)
+    config['lake_temp_buoy_offline'] = offline
+    f = open(os.path.join(DIR, 'config.py'), 'w')
+    f.write('config = %s' % pp.pformat(config))
+
 def get_readings():
     r  = requests.get("https://v2.wqdatalive.com/project/applet/html/831")
     soup = BeautifulSoup(r.text, "html.parser")
@@ -26,6 +35,9 @@ def get_readings():
             value = float(tds[1].contents[0].lower().replace(" ","_"))
             units = tds[2].contents[0].lower().replace(" ","_")
             if units == "c":
+                if value == -100000.00:
+                    set_buoy_offline(True)
+                    raise BuoyOfflineError("Lake temp -100000.00c (error state), buoy set to offline")
                 value = convert_c_to_f(value)
                 units = "f"
             value = math.floor(value*10)/10
@@ -58,6 +70,18 @@ def write_readings_to_rrd():
         if 'gmail' in config:
             sendAlertEmail(errors)
         print('\n'.join(errors))
+
+#This runs once per hour to check if an offline buoy is back
+def check_buoy():
+    if not config.get('lake_temp_sensors_disabled', True):
+        if config.get('lake_temp_buoy_offline', False):
+            try:
+                readings = get_readings()
+                if readings:
+                    set_buoy_offline(False)
+                    sendAlertEmail(["Buoy is back! Set to online"])
+            except BuoyOfflineError:
+                pass
 
 lake_temp_sensors_disabled = config.get('lake_temp_sensors_disabled', False)
 if not lake_temp_sensors_disabled:
