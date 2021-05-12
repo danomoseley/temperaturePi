@@ -30,7 +30,7 @@ def get_readings():
 
     readings = {}
 
-    for row in table.find_all("tr"):
+    for row in table.find_all("tr")[2:27]:
         if not row.has_attr("class"):
             tds = row.find_all('td')
             param = tds[0].contents[0].lower().replace(" ","_").replace(".","")
