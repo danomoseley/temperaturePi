@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
 
 from bs4 import BeautifulSoup
+import get_temp
 import requests
 import os
 import math
 import pprint
 from subprocess import getstatusoutput
 from utils import sendAlertEmail
+from utils import dbConnection
 from utils import convert_c_to_f
 from config import config
 
@@ -46,10 +48,25 @@ def get_readings():
 
     return readings
 
-def write_readings_to_rrd():
+def populate_initial_sensor_data():
+    conn = dbConnection()
+    cur = conn.cursor()
+    readings = get_readings()
+    for serial_code in readings:
+        cur.execute('INSERT INTO sensors \
+                        (serial_code, name) \
+                     VALUES \
+                        (?, ?)',
+                        (serial_code, serial_code))
+        conn.commit()
+
+def write_readings_to_db(readings):
+    for serial_code in readings:
+        get_temp.addTemp(serial_code, readings[serial_code][0]) 
+
+def write_readings_to_rrd(readings):
     errors = []
     try:
-        readings = get_readings()
         temps = ['NaN']*len(config['lake_temp_sensors'])
 
         for sensor_id in config['lake_temp_sensors']:
@@ -83,7 +100,11 @@ def check_buoy():
             except BuoyOfflineError:
                 pass
 
-lake_temp_sensors_disabled = config.get('lake_temp_sensors_disabled', False)
-if not lake_temp_sensors_disabled:
-    write_readings_to_rrd()
+if __name__ == "__main__":
+    lake_temp_sensors_disabled = config.get('lake_temp_sensors_disabled', True)
+    lake_temp_buoy_offline = config.get('lake_temp_buoy_offline', False)
+    if not lake_temp_sensors_disabled and not lake_temp_buoy_offline:
+        readings = get_readings()
+        write_readings_to_rrd(readings)
+        write_readings_to_db(readings)
 
