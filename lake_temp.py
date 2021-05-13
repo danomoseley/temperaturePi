@@ -24,13 +24,12 @@ def setBuoyOffline(offline=True):
     f.write('config = %s' % pp.pformat(config))
 
 def getReadings():
-    r  = requests.get("https://v2.wqdatalive.com/project/applet/html/831",  verify=False)
+    r  = requests.get("https://www.wqdatalive.com/project/applet/html/831")
     soup = BeautifulSoup(r.text, "html.parser")
     table = soup.find("table")
-
     readings = {}
 
-    for row in table.find_all("tr")[2:27]:
+    for row in table.find_all("tr"):
         if not row.has_attr("class"):
             tds = row.find_all('td')
             param = tds[0].contents[0].lower().replace(" ","_").replace(".","")
@@ -43,8 +42,7 @@ def getReadings():
                 value = convert_c_to_f(value)
                 units = "f"
             value = math.floor(value*10)/10
-            if value > -100 and value < 120:
-                readings[param] = (value, units)
+            readings[param] = (value, units)
 
     return readings
 
