@@ -1,2 +1,2 @@
-*/5 * * * * /home/pi/temperaturePi/ftp_graphs.py
+*/5 * * * * /home/pi/temperaturePi/upload_graphs.py
 2 * * * * /home/pi/temperaturePi/backup_db.py
