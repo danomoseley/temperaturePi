@@ -15,6 +15,7 @@ from utils import dbConnection
 from thermostat import runThermostat
 
 def provisionDatabase():
+    DIR = os.path.dirname(os.path.realpath(__file__))
     schema_filepath = os.path.join(DIR, 'sensor_values_schema.sql')
     with open(schema_filepath, 'rt') as f:
         schema = f.read()
@@ -138,6 +139,7 @@ def readSensors():
             if not sensor_disabled:
                 errors.append('%s sensor missing' % missing_sensor_config['name'])
     
+    DIR = os.path.dirname(os.path.realpath(__file__))
     rrd_path = os.path.join(DIR, 'database', 'temp.rrd')
     temp_values = ':'.join(map(str, temps))
     command = '/usr/bin/rrdtool update %s N:%s' % (rrd_path, temp_values)

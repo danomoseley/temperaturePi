@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from bs4 import BeautifulSoup
-import get_temp
+import temp
 import requests
 import os
 import math
@@ -62,7 +62,7 @@ def populateInitialSensorData():
 
 def writeReadingsToDb(readings):
     for serial_code in readings:
-        get_temp.addTemp(serial_code, readings[serial_code][0]) 
+        temp.addTemp(serial_code, readings[serial_code][0])
 
 def writeReadingsToRrd(readings):
     errors = []
@@ -100,7 +100,7 @@ def checkBuoy():
             except BuoyOfflineError:
                 pass
 
-def process()
+def process():
     lake_temp_sensors_disabled = config.get('lake_temp_sensors_disabled', True)
     lake_temp_buoy_offline = config.get('lake_temp_buoy_offline', False)
     if not lake_temp_sensors_disabled and not lake_temp_buoy_offline:
