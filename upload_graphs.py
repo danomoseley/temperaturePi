@@ -7,7 +7,7 @@ import temp
 import lake_temp
 import pressure
 import humidity
-import create_graphs
+import graphs
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -23,7 +23,7 @@ if os.path.isfile(os.path.join(DIR, 'database', 'pressure.rrd')):
 if os.path.isfile(os.path.join(DIR, 'database', 'lake_temp.rrd')):
     lake_temp.process()
 
-create_graphs.createGraphs()
+graphs.createGraphs()
 
 expires = datetime.utcnow() + timedelta(minutes=5)
 
