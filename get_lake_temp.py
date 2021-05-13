@@ -17,13 +17,13 @@ DIR = os.path.dirname(os.path.realpath(__file__))
 class BuoyOfflineError(Exception):
     pass
 
-def set_buoy_offline(offline=True):
+def setBuoyOffline(offline=True):
     pp = pprint.PrettyPrinter(indent=4)
     config['lake_temp_buoy_offline'] = offline
     f = open(os.path.join(DIR, 'config.py'), 'w')
     f.write('config = %s' % pp.pformat(config))
 
-def get_readings():
+def getReadings():
     r  = requests.get("https://v2.wqdatalive.com/project/applet/html/831",  verify=False)
     soup = BeautifulSoup(r.text, "html.parser")
     table = soup.find("table")
@@ -38,7 +38,7 @@ def get_readings():
             units = tds[2].contents[0].lower().replace(" ","_")
             if units == "c":
                 if value == -100000.00:
-                    set_buoy_offline(True)
+                    setBuoyOffline(True)
                     raise BuoyOfflineError("Lake temp -100000.00c (error state), buoy set to offline")
                 value = convert_c_to_f(value)
                 units = "f"
@@ -48,10 +48,10 @@ def get_readings():
 
     return readings
 
-def populate_initial_sensor_data():
+def populateInitialSensorData():
     conn = dbConnection()
     cur = conn.cursor()
-    readings = get_readings()
+    readings = getReadings()
     for serial_code in readings:
         cur.execute('INSERT INTO sensors \
                         (serial_code, name) \
@@ -60,11 +60,11 @@ def populate_initial_sensor_data():
                         (serial_code, serial_code))
         conn.commit()
 
-def write_readings_to_db(readings):
+def writeReadingsToDb(readings):
     for serial_code in readings:
         get_temp.addTemp(serial_code, readings[serial_code][0]) 
 
-def write_readings_to_rrd(readings):
+def writeReadingsToRrd(readings):
     errors = []
     try:
         temps = ['NaN']*len(config['lake_temp_sensors'])
@@ -93,9 +93,9 @@ def checkBuoy():
     if not config.get('lake_temp_sensors_disabled', True):
         if config.get('lake_temp_buoy_offline', False):
             try:
-                readings = get_readings()
+                readings = getReadings()
                 if readings:
-                    set_buoy_offline(False)
+                    setBuoyOffline(False)
                     sendAlertEmail(["Buoy is back! Set to online"])
             except BuoyOfflineError:
                 pass
@@ -104,9 +104,9 @@ def process()
     lake_temp_sensors_disabled = config.get('lake_temp_sensors_disabled', True)
     lake_temp_buoy_offline = config.get('lake_temp_buoy_offline', False)
     if not lake_temp_sensors_disabled and not lake_temp_buoy_offline:
-        readings = get_readings()
-        write_readings_to_rrd(readings)
-        write_readings_to_db(readings)
+        readings = getReadings()
+        writeReadingsToRrd(readings)
+        writeReadingsToDb(readings)
 
 if __name__ == "__main__":
     process()
