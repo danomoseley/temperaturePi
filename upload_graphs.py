@@ -3,7 +3,7 @@ import os
 from subprocess import getstatusoutput
 from config import config
 from datetime import datetime, timedelta
-import temp
+import temperature
 import lake_temp
 import pressure
 import humidity
@@ -12,7 +12,7 @@ import graphs
 DIR = os.path.dirname(os.path.realpath(__file__))
 
 if os.path.isfile(os.path.join(DIR, 'database', 'temp.rrd')):
-    temp.process()
+    temperature.process()
 
 if os.path.isfile(os.path.join(DIR, 'database', 'humidity.rrd')):
     humidity.process()

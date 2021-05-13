@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 from bs4 import BeautifulSoup
-import temp
+import temperature
 import requests
 import os
 import math
@@ -62,7 +62,7 @@ def populateInitialSensorData():
 
 def writeReadingsToDb(readings):
     for serial_code in readings:
-        temp.addTemp(serial_code, readings[serial_code][0])
+        temperature.addTemp(serial_code, readings[serial_code][0])
 
 def writeReadingsToRrd(readings):
     errors = []
