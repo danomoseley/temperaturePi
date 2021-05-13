@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 import os
 
-from get_lake_temp import check_buoy
+import get_lake_temp
 
-check_buoy()
+get_lake_temp.checkBuoy()
 

@@ -49,14 +49,18 @@ def readHumiditySensors():
         errors.append('Error processing humidity sensors')
     return errors
 
-errors = []
-try:
-    sensor_errors = readHumiditySensors()
-    errors.extend(sensor_errors)
-except Exception as e:
-    errors.append(getExceptionInfo(e))
+def process():
+    errors = []
+    try:
+        sensor_errors = readHumiditySensors()
+        errors.extend(sensor_errors)
+    except Exception as e:
+        errors.append(getExceptionInfo(e))
 
-if len(errors):
-    if 'gmail' in config:
-        sendAlertEmail(errors)
-    print('\n'.join(errors))
+    if len(errors):
+        if 'gmail' in config:
+            sendAlertEmail(errors)
+        print('\n'.join(errors))
+
+if __name__ == "__main__":
+    process()

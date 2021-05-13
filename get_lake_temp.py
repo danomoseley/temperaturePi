@@ -89,7 +89,7 @@ def write_readings_to_rrd(readings):
         print('\n'.join(errors))
 
 #This runs once per hour to check if an offline buoy is back
-def check_buoy():
+def checkBuoy():
     if not config.get('lake_temp_sensors_disabled', True):
         if config.get('lake_temp_buoy_offline', False):
             try:
@@ -100,11 +100,14 @@ def check_buoy():
             except BuoyOfflineError:
                 pass
 
-if __name__ == "__main__":
+def process()
     lake_temp_sensors_disabled = config.get('lake_temp_sensors_disabled', True)
     lake_temp_buoy_offline = config.get('lake_temp_buoy_offline', False)
     if not lake_temp_sensors_disabled and not lake_temp_buoy_offline:
         readings = get_readings()
         write_readings_to_rrd(readings)
         write_readings_to_db(readings)
+
+if __name__ == "__main__":
+    process()
 

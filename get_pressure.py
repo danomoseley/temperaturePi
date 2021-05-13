@@ -38,14 +38,19 @@ def readPressureSensors():
     #print("Altitude: %0.2f feet" % (sensor.altitude * 3.2808))
 
     return errors
-errors = []
-try:
-    sensor_errors = readPressureSensors()
-    errors.extend(sensor_errors)
-except Exception as e:
-    errors.append(getExceptionInfo(e))
 
-if len(errors):
-    if 'gmail' in config:
-        sendAlertEmail(errors)
-    print('\n'.join(errors))
+def process():
+    errors = []
+    try:
+        sensor_errors = readPressureSensors()
+        errors.extend(sensor_errors)
+    except Exception as e:
+        errors.append(getExceptionInfo(e))
+
+    if len(errors):
+        if 'gmail' in config:
+            sendAlertEmail(errors)
+        print('\n'.join(errors))
+
+if __name__ == "__main__":
+    process()

@@ -168,7 +168,7 @@ def getDailySensorReadingMetrics():
                 + str(row[3]).ljust(colwidth) \
                 + str(row[4]).ljust(colwidth))
 
-if __name__ == '__main__':
+def process():
     DIR = os.path.dirname(os.path.realpath(__file__))
     db_filename = 'sensor_values.db'
     db_filepath = os.path.join(DIR, 'database', db_filename)
@@ -190,3 +190,7 @@ if __name__ == '__main__':
         print('\n'.join(errors))
 
     #getDailySensorReadingMetrics()
+
+if __name__ == '__main__':
+    process()
+

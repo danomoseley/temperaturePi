@@ -3,22 +3,27 @@ import os
 from subprocess import getstatusoutput
 from config import config
 from datetime import datetime, timedelta
+import get_temp
+import get_lake_temp
+import get_pressure
+import get_humidity
+import create_graphs
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 
 if os.path.isfile(os.path.join(DIR, 'database', 'temp.rrd')):
-    getstatusoutput(os.path.join(DIR, 'get_temp.py'))
+    get_temp.process()
 
 if os.path.isfile(os.path.join(DIR, 'database', 'humidity.rrd')):
-    getstatusoutput(os.path.join(DIR, 'get_humidity.py'))
+    get_humidity.process()
 
 if os.path.isfile(os.path.join(DIR, 'database', 'pressure.rrd')):
-    getstatusoutput(os.path.join(DIR, 'get_pressure.py'))
+    get_pressure.process()
 
 if os.path.isfile(os.path.join(DIR, 'database', 'lake_temp.rrd')):
-    getstatusoutput(os.path.join(DIR, 'get_lake_temp.py'))
+    get_lake_temp.process()
 
-getstatusoutput(os.path.join(DIR, 'create_graphs.py'))
+create_graphs.createGraphs()
 
 expires = datetime.utcnow() + timedelta(minutes=5)
 
