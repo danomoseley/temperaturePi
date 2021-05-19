@@ -86,6 +86,30 @@ def writeReadingsToRrd(readings):
             sendAlertEmail(errors)
         print('\n'.join(errors))
 
+def writeWindReadingsToRrd(readings):
+    errors = []
+    try:
+        temps = ['NaN']*len(config['wind_speed_sensors'])
+
+        for sensor_id in config['wind_speed_sensors']:
+            rrd_order = config['wind_speed_sensors'][sensor_id]['rrd_order']
+            if sensor_id in readings:
+                temps[rrd_order-1] = readings[sensor_id][0]
+
+        rrd_path = os.path.join(DIR, 'database', 'wind_speed.rrd')
+        values = ':'.join(map(str, temps))
+        command = '/usr/bin/rrdtool update %s N:%s' % (rrd_path, values)
+        status, message = getstatusoutput(command)
+        if status != 0:
+            errors.append('Error running %s - %d - %s' % (command, status, message))
+    except Exception as e:
+        errors.append(getExceptionInfo(e))
+
+    if len(errors):
+        if 'gmail' in config:
+            sendAlertEmail(errors)
+        print('\n'.join(errors))
+
 #This runs once per hour to check if an offline buoy is back
 def checkBuoy():
     if not config.get('lake_temp_sensors_disabled', True):
@@ -105,6 +129,7 @@ def process():
         readings = getReadings()
         writeReadingsToRrd(readings)
         writeReadingsToDb(readings)
+        writeWindReadingsToRrd(readings)
 
 if __name__ == "__main__":
     process()

@@ -25,6 +25,11 @@ def createGraphs(monthly=False, yearly=False):
     sorted_lake_temp_sensor_ids = sorted(lake_temp_sensors, key=lambda key: lake_temp_sensors[key]['display_order'])
     sorted_lake_temp_sensors = [lake_temp_sensors[k] for k in sorted_lake_temp_sensor_ids if not lake_temp_sensors[k].get('disabled', False)]
 
+    wind_speed_sensors = config['wind_speed_sensors']
+    sorted_wind_speed_sensor_ids = sorted(wind_speed_sensors, key=lambda key: wind_speed_sensors[key]['display_order'])
+    sorted_wind_speed_sensors = [wind_speed_sensors[k] for k in sorted_wind_speed_sensor_ids if not wind_speed_sensors[k].get('disabled', False)]
+
+
     graphs = [
         {
             'rrd_path': os.path.join(DIR, 'database', 'temp.rrd'),
@@ -466,6 +471,95 @@ def createGraphs(monthly=False, yearly=False):
                 },
             ]
         },
+        {
+            'rrd_path': os.path.join(DIR, 'database', 'wind_speed.rrd'),
+            'vertical_label': 'Wind Speed (m/s)',
+            'unit': ' ',
+            'sensors': sorted_wind_speed_sensors,
+            'variations': [
+                {
+                    'filename': 'wind_speed_hourly.png',
+                    'title': 'Wind Speed Last 4 Hours',
+                    'start': '-14400'
+                },
+                {
+                    'filename': 'wind_speed_hourly_mobile.png',
+                    'title': 'Wind Speed Last 4 Hours',
+                    'start': '-14400',
+                    'title_font': 30,
+                    'axis_font': 17,
+                    'legend_font': 29,
+                    'unit_font': 20,
+                    'padding': 4,
+                    'line_stroke': 8
+                },
+                {
+                    'filename': 'wind_speed_daily.png',
+                    'title': 'Wind Speed Last 24 Hours',
+                    'start': '-1d'
+                },
+                {
+                    'filename': 'wind_speed_daily_mobile.png',
+                    'title': 'Wind Speed Last 24 Hours',
+                    'start': '-1d',
+                    'title_font': 30,
+                    'axis_font': 17,
+                    'legend_font': 29,
+                    'unit_font': 20,
+                    'padding': 4,
+                    'line_stroke': 8
+                },
+                {
+                    'filename': 'wind_speed_weekly.png',
+                    'title': 'Weekly Wind Speed',
+                    'start': '-1w'
+                },
+                {
+                    'filename': 'wind_speed_weekly_mobile.png',
+                    'title': 'Weekly Wind Speed',
+                    'start': '-1w',
+                    'title_font': 30,
+                    'axis_font': 17,
+                    'legend_font': 29,
+                    'unit_font': 20,
+                    'padding': 4,
+                    'line_stroke': 8
+                },
+                {
+                    'filename': 'wind_speed_monthly.png',
+                    'title': 'Monthly Wind Speed',
+                    'start': '-1m'
+                },
+                {
+                    'filename': 'wind_speed_monthly_mobile.png',
+                    'title': 'Monthly Wind Speed',
+                    'start': '-1m',
+                    'title_font': 30,
+                    'axis_font': 17,
+                    'legend_font': 29,
+                    'unit_font': 20,
+                    'padding': 4,
+                    'line_stroke': 8
+                },
+                {
+                    'filename': 'wind_speed_yearly.png',
+                    'title': 'Yearly Wind Speed',
+                    'start': '-1y'
+                },
+                {
+                    'filename': 'wind_speed_yearly_mobile.png',
+                    'title': 'Yearly Wind Speed',
+                    'start': '-1y',
+                    'title_font': 30,
+                    'axis_font': 17,
+                    'legend_font': 29,
+                    'unit_font': 20,
+                    'padding': 4,
+                    'line_stroke': 8
+                },
+            ]
+        },
+
     ]
 
     directory = os.path.join(DIR, 'latest_graphs')

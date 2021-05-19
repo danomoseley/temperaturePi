@@ -165,6 +165,22 @@ config = {
             'color': '#0033CC'
         }
     },
+    'wind_speed_sensors': {
+        'windsp': {
+            'color': '#53B0F5',
+            'display_order': 1,
+            'ds_name': 'lake_wind_speed',
+            'name': 'Lake Wind Speed',
+            'rrd_order': 1
+        },
+        'max_windsp': {
+            'color': '#66CCFF',
+            'display_order': 2,
+            'ds_name': 'max_lake_wind_speed',
+            'name': 'Max Lake Wind Speed',
+            'rrd_order': 2
+        }
+    },
     'gmail': {
         'username': 'email@gmail.com',
         'password': 'password',
