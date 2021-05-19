@@ -23,7 +23,9 @@ if os.path.isfile(os.path.join(DIR, 'database', 'pressure.rrd')):
 if os.path.isfile(os.path.join(DIR, 'database', 'lake_temp.rrd')):
     lake_temp.process()
 
-graphs.createGraphs()
+now = datetime.now()
+create_extras = (now.hour == 0 and now.minute < 5)
+graphs.createGraphs(monthly=create_extras, yearly=create_extras)
 
 expires = datetime.utcnow() + timedelta(minutes=5)
 
