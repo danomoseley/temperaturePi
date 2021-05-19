@@ -130,6 +130,29 @@ def process():
         writeReadingsToRrd(readings)
         writeReadingsToDb(readings)
         writeWindReadingsToRrd(readings)
+        checkCalmness()
+
+def setCalmAlarmState(in_alarm=True):
+    pp = pprint.PrettyPrinter(indent=4)
+    config['lake_calm_in_alarm'] = in_alarm
+    f = open(os.path.join(DIR, 'config.py'), 'w')
+    f.write('config = %s' % pp.pformat(config))
+
+def checkCalmness():
+    conn = dbConnection()
+    cur = conn.cursor()
+    cur.execute("SELECT avg(value) FROM sensor_readings WHERE sensor_id=58 and datetime(timestamp) > datetime('now', '-1 hour')")
+    wind_speed = cur.fetchone()[0]
+    calm_in_alarm = config.get('lake_calm_in_alarm', False)
+    # This is in meters per second
+    wind_threshold = 1
+    print(wind_speed)
+    if wind_speed < wind_threshold:
+        if not calm_in_alarm:
+            sendAlertEmail(["The lake is very calm!", f"{wind_speed:.1f} m/s average over the past hour"])
+            setCalmAlarmState(True)
+    elif calm_in_alarm:
+        setCalmAlarmState(False)
 
 if __name__ == "__main__":
     process()
