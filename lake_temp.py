@@ -7,7 +7,6 @@ import os
 import math
 import pprint
 import utils
-from subprocess import getstatusoutput
 from config import config
 
 DIR = os.path.dirname(os.path.realpath(__file__))
@@ -60,54 +59,6 @@ def writeReadingsToDb(readings):
     for serial_code in readings:
         temperature.addTemp(serial_code, readings[serial_code][0])
 
-def writeReadingsToRrd(readings):
-    errors = []
-    try:
-        temps = ['NaN']*len(config['lake_temp_sensors'])
-
-        for sensor_id in config['lake_temp_sensors']:
-            rrd_order = config['lake_temp_sensors'][sensor_id]['rrd_order']
-            if sensor_id in readings:
-                temps[rrd_order-1] = readings[sensor_id][0]
-
-        rrd_path = os.path.join(DIR, 'database', 'lake_temp.rrd')
-        temp_values = ':'.join(map(str, temps))
-        command = '/usr/bin/rrdtool update %s N:%s' % (rrd_path, temp_values)
-        status, message = getstatusoutput(command)
-        if status != 0:
-            errors.append('Error running %s - %d - %s' % (command, status, message))
-    except Exception as e:
-        errors.append(getExceptionInfo(e))
-
-    if len(errors):
-        if 'gmail' in config:
-            sendAlertEmail(errors)
-        print('\n'.join(errors))
-
-def writeWindReadingsToRrd(readings):
-    errors = []
-    try:
-        temps = ['NaN']*len(config['wind_speed_sensors'])
-
-        for sensor_id in config['wind_speed_sensors']:
-            rrd_order = config['wind_speed_sensors'][sensor_id]['rrd_order']
-            if sensor_id in readings:
-                temps[rrd_order-1] = readings[sensor_id][0]
-
-        rrd_path = os.path.join(DIR, 'database', 'wind_speed.rrd')
-        values = ':'.join(map(str, temps))
-        command = '/usr/bin/rrdtool update %s N:%s' % (rrd_path, values)
-        status, message = getstatusoutput(command)
-        if status != 0:
-            errors.append('Error running %s - %d - %s' % (command, status, message))
-    except Exception as e:
-        errors.append(getExceptionInfo(e))
-
-    if len(errors):
-        if 'gmail' in config:
-            sendAlertEmail(errors)
-        print('\n'.join(errors))
-
 #This runs once per hour to check if an offline buoy is back
 def checkBuoy():
     if not config.get('lake_temp_sensors_disabled', True):
@@ -125,10 +76,15 @@ def process():
     lake_temp_buoy_offline = config.get('lake_temp_buoy_offline', False)
     if not lake_temp_sensors_disabled and not lake_temp_buoy_offline:
         readings = getReadings()
-        writeReadingsToRrd(readings)
+        errors = []
+        errors.extend(utils.writeReadingsToRrd('lake_temp.rrd', config['lake_temp_sensors'], readings))
         writeReadingsToDb(readings)
-        writeWindReadingsToRrd(readings)
+        errors.extend(utils.writeReadingsToRrd('wind_speed.rrd', config['wind_speed_sensors'], readings))
         checkCalmness()
+        if len(errors):
+            if 'gmail' in config:
+                utils.sendAlertEmail(errors)
+            print('\n'.join(errors))
 
 def setCalmAlarmState(in_alarm=True):
     pp = pprint.PrettyPrinter(indent=4)

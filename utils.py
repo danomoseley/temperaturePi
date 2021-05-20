@@ -5,6 +5,7 @@ import smtplib
 import sqlite3
 from datetime import datetime
 import sys, os, traceback
+from subprocess import getstatusoutput
 
 def sendAlertEmail(errors):
     username = config['gmail']['username']
@@ -44,3 +45,26 @@ class dbConnection(object):
             cls.conn = sqlite3.connect(db_filepath)
 
         return cls.conn
+
+def writeReadingsToRrd(rrd_filename, sensors_config, readings):
+    errors = []
+    try:
+        values = ['NaN']*len(sensors_config)
+
+        for sensor_id in sensors_config:
+            rrd_order = sensors_config[sensor_id]['rrd_order']
+            if sensor_id in readings:
+                values[rrd_order-1] = readings[sensor_id][0]
+
+        DIR = os.path.dirname(os.path.realpath(__file__))
+        rrd_path = os.path.join(DIR, 'database', rrd_filename)
+        rrd_data = ':'.join(map(str, values))
+        command = '/usr/bin/rrdtool update %s N:%s' % (rrd_path, rrd_data)
+        status, message = getstatusoutput(command)
+        if status != 0:
+            errors.append('Error running %s - %d - %s' % (command, status, message))
+    except Exception as e:
+        errors.append(getExceptionInfo(e))
+
+    return errors
+
