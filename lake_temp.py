@@ -6,10 +6,8 @@ import requests
 import os
 import math
 import pprint
+import utils
 from subprocess import getstatusoutput
-from utils import sendAlertEmail
-from utils import dbConnection
-from utils import convert_c_to_f, getExceptionInfo
 from config import config
 
 DIR = os.path.dirname(os.path.realpath(__file__))
@@ -39,7 +37,7 @@ def getReadings():
                 if value == -100000.00:
                     setBuoyOffline(True)
                     raise BuoyOfflineError("Lake temp -100000.00c (error state), buoy set to offline")
-                value = convert_c_to_f(value)
+                value = utils.convert_c_to_f(value)
                 units = "f"
             value = math.floor(value*10)/10
             readings[param] = (value, units)
@@ -47,7 +45,7 @@ def getReadings():
     return readings
 
 def populateInitialSensorData():
-    conn = dbConnection()
+    conn = utils.dbConnection()
     cur = conn.cursor()
     readings = getReadings()
     for serial_code in readings:
@@ -118,7 +116,7 @@ def checkBuoy():
                 readings = getReadings()
                 if readings:
                     setBuoyOffline(False)
-                    sendAlertEmail(["Buoy is back! Set to online"])
+                    utils.sendAlertEmail(["Buoy is back! Set to online"])
             except BuoyOfflineError:
                 pass
 
@@ -139,7 +137,7 @@ def setCalmAlarmState(in_alarm=True):
     f.write('config = %s' % pp.pformat(config))
 
 def checkCalmness():
-    conn = dbConnection()
+    conn = utils.dbConnection()
     cur = conn.cursor()
     cur.execute("SELECT avg(value) FROM sensor_readings WHERE sensor_id=58 and datetime(timestamp) > datetime('now', '-1 hour')")
     wind_speed = cur.fetchone()[0]
@@ -149,7 +147,7 @@ def checkCalmness():
     print(wind_speed)
     if wind_speed < wind_threshold:
         if not calm_in_alarm:
-            sendAlertEmail(["The lake is very calm!", f"{wind_speed:.1f} m/s average over the past hour"])
+            utils.sendAlertEmail(["The lake is very calm!", f"{wind_speed:.1f} m/s average over the past hour"])
             setCalmAlarmState(True)
     elif calm_in_alarm:
         setCalmAlarmState(False)
