@@ -108,6 +108,10 @@ def createGraphs(daily=True, weekly=False, monthly=False, yearly=False):
             'vertical_label': 'Air Pressure (Inches)',
             'unit': '"',
             'sensors': sorted_pressure_sensors,
+            'extra_options': [
+                '--alt-autoscale',
+                '--alt-y-grid',
+            ],
             'variations': [
                 {
                     'filename': 'pressure_daily.png',
@@ -460,6 +464,9 @@ def createGraphs(daily=True, weekly=False, monthly=False, yearly=False):
                     graph_variation['legend_font'], graph_variation['unit_font'], \
                     graph_variation['start'], graph['vertical_label'], \
                     label.rjust(len(label) + max_name_length))
+                if 'extra_options' in graph:
+                    for extra_option in graph['extra_options']:
+                        command += ' %s ' % (extra_option)
 
                 for sensor in graph['sensors']:
                     display_name = sensor['name'] + '\:'
