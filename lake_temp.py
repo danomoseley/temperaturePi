@@ -1,11 +1,15 @@
 #!/usr/bin/env python3
 
 from bs4 import BeautifulSoup
+from subprocess import getstatusoutput
+
 import temperature
 import requests
+from requests.exceptions import ConnectTimeout, ReadTimeout, ConnectionError
 import os
 import math
 import pprint
+import time
 import utils
 from config import config
 
@@ -21,27 +25,33 @@ def setBuoyOffline(offline=True):
     f.write('config = %s' % pp.pformat(config))
 
 def getReadings():
-    r  = requests.get("https://www.wqdatalive.com/project/applet/html/831")
-    soup = BeautifulSoup(r.text, "html.parser")
-    table = soup.find("table")
-    readings = {}
+    try:
+        r  = requests.get("https://www.wqdatalive.com/project/applet/html/831", timeout=10)
+        soup = BeautifulSoup(r.text, "html.parser")
+        table = soup.find("table")
+        readings = {}
 
-    for row in table.find_all("tr"):
-        if not row.has_attr("class"):
-            tds = row.find_all('td')
-            param = tds[0].contents[0].lower().replace(" ","_").replace(".","")
-            value = float(tds[1].contents[0].lower().replace(" ","_"))
-            units = tds[2].contents[0].lower().replace(" ","_")
-            if units == "c":
-                if value == -100000.00:
-                    setBuoyOffline(True)
-                    raise BuoyOfflineError("Lake temp -100000.00c (error state), buoy set to offline")
-                value = utils.convert_c_to_f(value)
-                units = "f"
-            value = math.floor(value*10)/10
-            readings[param] = (value, units)
+        for row in table.find_all("tr"):
+            if not row.has_attr("class"):
+                tds = row.find_all('td')
+                param = tds[0].contents[0].lower().replace(" ","_").replace(".","")
+                value = float(tds[1].contents[0].lower().replace(" ","_"))
+                units = tds[2].contents[0].lower().replace(" ","_")
+                if param in readings:
+                    param += "_"+units
+                if units == "c":
+                    if value == -100000.00:
+                        setBuoyOffline(True)
+                        raise BuoyOfflineError("Lake temp -100000.00c (error state), buoy set to offline")
+                    value = utils.convert_c_to_f(value)
+                    units = "f"
+                value = math.floor(value*10)/10
+                readings[param] = (value, units)
 
-    return readings
+        return readings
+    except (ConnectionError, ConnectTimeout, ReadTimeout) as error:
+        setBuoyOffline(True)
+        raise BuoyOfflineError("Lake temp connection timeout, buoy set to offline")
 
 def populateInitialSensorData():
     conn = utils.dbConnection()
@@ -75,12 +85,23 @@ def process():
     lake_temp_sensors_disabled = config.get('lake_temp_sensors_disabled', True)
     lake_temp_buoy_offline = config.get('lake_temp_buoy_offline', False)
     if not lake_temp_sensors_disabled and not lake_temp_buoy_offline:
-        readings = getReadings()
         errors = []
-        errors.extend(utils.writeReadingsToRrd('lake_temp.rrd', config['lake_temp_sensors'], readings))
-        writeReadingsToDb(readings)
-        errors.extend(utils.writeReadingsToRrd('wind_speed.rrd', config['wind_speed_sensors'], readings))
-        checkCalmness()
+        try:
+            tic = time.perf_counter()
+            readings = getReadings()
+            toc = time.perf_counter()
+            print(f"getReadings took {toc - tic:0.4f} seconds")
+
+            errors.extend(utils.writeReadingsToRrd('lake_temp.rrd', config['lake_temp_sensors'], readings))
+            tic = time.perf_counter()
+            writeReadingsToDb(readings)
+            toc = time.perf_counter()
+            print(f"writeReadingsToDb took {toc - tic:0.4f} seconds")
+
+            errors.extend(utils.writeReadingsToRrd('wind_speed.rrd', config['wind_speed_sensors'], readings))
+            
+        except BuoyOfflineError as e:
+            errors.append(str(e))
         if len(errors):
             if 'gmail' in config:
                 utils.sendAlertEmail(errors)
