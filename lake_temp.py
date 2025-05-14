@@ -113,21 +113,44 @@ def setCalmAlarmState(in_alarm=True):
     f = open(os.path.join(DIR, 'config.py'), 'w')
     f.write('config = %s' % pp.pformat(config))
 
+def setGlassAlarmState(in_alarm=True):
+    pp = pprint.PrettyPrinter(indent=4)
+    config['lake_glass_in_alarm'] = in_alarm
+    f = open(os.path.join(DIR, 'config.py'), 'w')
+    f.write('config = %s' % pp.pformat(config))
+
 def checkCalmness():
-    conn = utils.dbConnection()
-    cur = conn.cursor()
-    cur.execute("SELECT avg(value) FROM sensor_readings WHERE sensor_id=58 and datetime(timestamp) > datetime('now', '-1 hour')")
-    wind_speed = cur.fetchone()[0]
-    calm_in_alarm = config.get('lake_calm_in_alarm', False)
-    # This is in meters per second
-    wind_threshold = 1
-    print(wind_speed)
-    if wind_speed < wind_threshold:
-        if not calm_in_alarm:
-            utils.sendAlertEmail(["The lake is very calm!", f"{wind_speed:.1f} m/s average over the past hour"])
-            setCalmAlarmState(True)
-    elif calm_in_alarm:
-        setCalmAlarmState(False)
+    lake_temp_sensors_disabled = config.get('lake_temp_sensors_disabled', True)
+    lake_temp_buoy_offline = config.get('lake_temp_buoy_offline', False)
+    if not lake_temp_sensors_disabled and not lake_temp_buoy_offline:
+        rrd_path = os.path.join(DIR, 'database/wind_speed.rrd')
+        command = f"rrdtool graph test.png --start -1hour 'DEF:data={rrd_path}:lake_wind_speed:AVERAGE' PRINT:data:AVERAGE:%lf|awk 'NR>1'"
+        status, output = getstatusoutput(command)
+
+        if status == 0:
+            wind_speed = float(output)
+            calm_in_alarm = config.get('lake_calm_in_alarm', False)
+            glass_in_alarm = config.get('lake_glass_in_alarm', False)
+            # This is in meters per second
+            wind_threshold = 1
+            wind_threshold_glass = 0.5
+            if wind_speed < wind_threshold_glass:
+                if not glass_in_alarm:
+                    utils.sendAlertEmail(["The lake is GLASS!", f"{wind_speed:.1f} m/s average over the past hour"])
+                    setGlassAlarmState(True)
+            elif wind_speed < wind_threshold:
+                if glass_in_alarm and not calm_in_alarm:
+                    utils.sendAlertEmail(["The lake isn't that glassy anymore, but still very calm!", f"{wind_speed:.1f} m/s average over the past hour"])
+                    setGlassAlarmState(False)
+                elif not calm_in_alarm:
+                    utils.sendAlertEmail(["The lake is very calm!", f"{wind_speed:.1f} m/s average over the past hour"])
+                    setCalmAlarmState(True)
+            elif calm_in_alarm or glass_in_alarm:
+                utils.sendAlertEmail(["The lake isn't that calm anymore.", f"{wind_speed:.1f} m/s average over the past hour"])
+                setCalmAlarmState(False)
+                setGlassAlarmState(False)
+        else:
+            utils.sendAlertEmail(["checkCalmness error!", f"{status} {output}"])
 
 if __name__ == "__main__":
     process()
