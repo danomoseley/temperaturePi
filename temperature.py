@@ -73,6 +73,46 @@ def addTemp(serial_code, value):
                     (sensor['id'], value))
     conn.commit()
 
+    if sensor['id'] == 2 and config.get("daily_basement_heat_cost", False):
+        logDailyHeatingMinutes(sensor['id'], value)
+
+def getLastTemp(sensor_id):
+    conn = dbConnection()
+    cur = conn.cursor()
+    cur.execute('SELECT value FROM sensor_readings WHERE sensor_id = ? ORDER BY timestamp DESC LIMIT 1 OFFSET 1;',
+                    (sensor_id,))
+    row = cur.fetchone()
+    return row[0]
+
+def logDailyHeatingMinutes(sensor_id, temp):
+    last_temp = getLastTemp(sensor_id)
+    if temp > last_temp:
+        incrementDailyHeatingMinutes(sensor_id)
+
+def getCurrentDailyHeatingMinutes(sensor_id):
+    conn = dbConnection()
+    cur = conn.cursor()
+    cur.execute('SELECT heat_minutes FROM daily_heating_minutes WHERE sensor_id = ? and heat_date = date("now","localtime");',
+                    (sensor_id,))
+    row = cur.fetchone()
+    if row:
+        return row[0]
+    else:
+        return None
+
+def incrementDailyHeatingMinutes(sensor_id):
+    current_daily_heating_minutes = getCurrentDailyHeatingMinutes(sensor_id)
+    conn = dbConnection()
+    cur = conn.cursor()
+    if current_daily_heating_minutes:
+        cur.execute('UPDATE daily_heating_minutes set heat_minutes=? WHERE heat_date=date("now","localtime") and sensor_id=?;',
+                    (current_daily_heating_minutes+5, sensor_id,))
+        conn.commit()
+    else:
+        cur.execute('INSERT INTO daily_heating_minutes (heat_date, sensor_id, heat_minutes) VALUES (date("now","localtime"), ?, 5)',
+                    (sensor_id,))
+        conn.commit()
+
 def readSensors():
     errors = []
     temps = ['NaN']*len(config['temp_sensors'])

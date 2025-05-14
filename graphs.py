@@ -5,6 +5,7 @@ from config import config
 import collections
 from subprocess import getstatusoutput
 import time
+import temperature
 
 def createGraphs(daily=True, weekly=False, monthly=False, yearly=False):
     DIR = os.path.dirname(os.path.realpath(__file__))
@@ -519,6 +520,10 @@ def createGraphs(daily=True, weekly=False, monthly=False, yearly=False):
                         command += "' | AWAY'"
                     if config.get("thermostat_out", False):
                         command += "' | OUT'"
+                    if config.get("daily_basement_heat_cost", False):
+                        daily_basement_heat_minutes = temperature.getCurrentDailyHeatingMinutes(2)
+                        daily_basement_heat_cost = round((daily_basement_heat_minutes / 60) * 4 * .17758, 2)
+                        command += f"' | ${daily_basement_heat_cost:.2f} basement heat'"
 
                 #print(command)
                 tic = time.perf_counter()
