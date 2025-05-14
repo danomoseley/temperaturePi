@@ -3,6 +3,7 @@
 from bs4 import BeautifulSoup
 from subprocess import getstatusoutput
 
+from datetime import datetime
 import temperature
 import requests
 from requests.exceptions import ConnectTimeout, ReadTimeout, ConnectionError
@@ -120,6 +121,14 @@ def setGlassAlarmState(in_alarm=True):
     f.write('config = %s' % pp.pformat(config))
 
 def checkCalmness():
+    calm_in_alarm = config.get('lake_calm_in_alarm', False)
+    glass_in_alarm = config.get('lake_glass_in_alarm', False)
+    now = datetime.now()
+    if 21 <= now.hour or now.hour < 6:
+        if calm_in_alarm or glass_in_alarm:
+            pass
+        else:
+            return
     lake_temp_sensors_disabled = config.get('lake_temp_sensors_disabled', True)
     lake_temp_buoy_offline = config.get('lake_temp_buoy_offline', False)
     if not lake_temp_sensors_disabled and not lake_temp_buoy_offline:
@@ -129,8 +138,6 @@ def checkCalmness():
 
         if status == 0:
             wind_speed = float(output)
-            calm_in_alarm = config.get('lake_calm_in_alarm', False)
-            glass_in_alarm = config.get('lake_glass_in_alarm', False)
             # This is in meters per second
             wind_threshold = 1
             wind_threshold_glass = 0.5
