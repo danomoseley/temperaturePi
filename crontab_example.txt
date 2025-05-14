@@ -1,2 +1,41 @@
-*/5 * * * * /home/pi/temperaturePi/upload_graphs.py
-2 * * * * /home/pi/temperaturePi/backup_db.py
+*/5 * * * * /home/pi/venv/temperaturePi/bin/python3 /home/pi/temperaturePi/upload_graphs.py 2>&1 | /usr/bin/logger -t temperaturePi-upload_graphs
+0 * * * * /home/pi/venv/temperaturePi/bin/python3 /home/pi/temperaturePi/check_buoy_status.py 2>&1 | /usr/bin/logger -t temperaturePi-check_buoy_status
+18 * * * * /home/pi/venv/temperaturePi/bin/python3 /home/pi/temperaturePi/backup_db.py 2>&1 | /usr/bin/logger -t temperaturePi-backup_db
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+~                                                                                                                                                                      
+"/tmp/crontab.2CTBvZ/crontab" 5L, 610B                                                                                                               1,1           All
