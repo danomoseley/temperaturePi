@@ -399,6 +399,12 @@ def createGraphs(daily=True, weekly=False, monthly=False, yearly=False):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
+    files = os.listdir(directory)
+    for file in files:
+        file_path = os.path.join(directory, file)
+        if os.path.isfile(file_path):
+            os.remove(file_path)
+
     lake_temp_sensors_disabled = config.get('lake_temp_sensors_disabled', True)
 
     overall_tic = time.perf_counter()
