@@ -17,11 +17,14 @@ def sendAlertEmail(errors):
     fromaddr = config['gmail']['from_address']
     toaddrs = config['gmail']['to_addresses']
 
-    server = smtplib.SMTP('smtp.gmail.com:587')
-    server.starttls()
-    server.login(username,password)
-    server.sendmail(fromaddr, toaddrs, msg)
-    server.quit()
+    try:
+        server = smtplib.SMTP('smtp.gmail.com:587')
+        server.starttls()
+        server.login(username,password)
+        server.sendmail(fromaddr, toaddrs, msg)
+        server.quit()
+    except:
+        print('SMTP error, offline?')
 
 def convert_c_to_f(temp_c):
     return 9.0/5.0 * float(temp_c) + 32.0
