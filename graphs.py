@@ -399,6 +399,8 @@ def createGraphs(daily=True, weekly=False, monthly=False, yearly=False):
     if not os.path.exists(directory):
         os.makedirs(directory)
 
+    lake_temp_sensors_disabled = config.get('lake_temp_sensors_disabled', True)
+
     overall_tic = time.perf_counter()
     for graph in graphs:
         if os.path.isfile(graph['rrd_path']) and len(graph['sensors']):
@@ -409,6 +411,9 @@ def createGraphs(daily=True, weekly=False, monthly=False, yearly=False):
                     max_name_length = name_length
             max_name_length += 2
             for graph_variation in graph['variations']:
+                if lake_temp_sensors_disabled:
+                    if 'lake' in graph_variation['filename'] or 'wind' in graph_variation['filename']:
+                        continue
                 if 'daily' in graph_variation['filename'] and not daily:
                     continue
                 if 'yearly' in graph_variation['filename'] and not yearly:
