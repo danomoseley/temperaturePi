@@ -38,22 +38,6 @@ def createGraphs(monthly=False, yearly=False):
             'sensors': sorted_temp_sensors,
             'variations': [
                 {
-                    'filename': 'temp_hourly.png',
-                    'title': 'Temperature Last 4 Hours',
-                    'start': '-14400'
-                },
-                {
-                    'filename': 'temp_hourly_mobile.png',
-                    'title': 'Temperature Last 4 Hours',
-                    'start': '-14400',
-                    'title_font': 30,
-                    'axis_font': 17,
-                    'legend_font': 29,
-                    'unit_font': 20,
-                    'padding': 4,
-                    'line_stroke': 8
-                },
-                {
                     'filename': 'temp_daily.png',
                     'title': 'Temperature Last 24 Hours',
                     'start': '-1d'
@@ -125,22 +109,6 @@ def createGraphs(monthly=False, yearly=False):
             'unit': '"',
             'sensors': sorted_pressure_sensors,
             'variations': [
-                {
-                    'filename': 'pressure_hourly.png',
-                    'title': 'Air Pressure Last 4 Hours',
-                    'start': '-14400'
-                },
-                {
-                    'filename': 'pressure_hourly_mobile.png',
-                    'title': 'Air Pressure Last 4 Hours',
-                    'start': '-14400',
-                    'title_font': 30,
-                    'axis_font': 17,
-                    'legend_font': 29,
-                    'unit_font': 20,
-                    'padding': 4,
-                    'line_stroke': 8
-                },
                 {
                     'filename': 'pressure_daily.png',
                     'title': 'Air Pressure Last 24 Hours',
@@ -302,22 +270,6 @@ def createGraphs(monthly=False, yearly=False):
             'sensors': sorted_humidity_sensors,
             'variations': [
                 {
-                    'filename': 'humidity_hourly.png',
-                    'title': 'Humidity Last 4 Hours',
-                    'start': '-14400'
-                },
-                {
-                    'filename': 'humidity_hourly_mobile.png',
-                    'title': 'Humidity Last 4 Hours',
-                    'start': '-14400',
-                    'title_font': 30,
-                    'axis_font': 17,
-                    'legend_font': 29,
-                    'unit_font': 20,
-                    'padding': 4,
-                    'line_stroke': 8
-                },
-                {
                     'filename': 'humidity_daily.png',
                     'title': 'Humidity Last 24 Hours',
                     'start': '-1d'
@@ -390,22 +342,6 @@ def createGraphs(monthly=False, yearly=False):
             'sensors': sorted_lake_temp_sensors,
             'variations': [
                 {
-                    'filename': 'lake_temp_hourly.png',
-                    'title': 'Lake Temperature Last 4 Hours',
-                    'start': '-14400'
-                },
-                {
-                    'filename': 'lake_temp_hourly_mobile.png',
-                    'title': 'Lake Temperature Last 4 Hours',
-                    'start': '-14400',
-                    'title_font': 30,
-                    'axis_font': 17,
-                    'legend_font': 29,
-                    'unit_font': 20,
-                    'padding': 4,
-                    'line_stroke': 8
-                },
-                {
                     'filename': 'lake_temp_daily.png',
                     'title': 'Lake Temperature Last 24 Hours',
                     'start': '-1d'
@@ -477,22 +413,6 @@ def createGraphs(monthly=False, yearly=False):
             'unit': ' ',
             'sensors': sorted_wind_speed_sensors,
             'variations': [
-                {
-                    'filename': 'wind_speed_hourly.png',
-                    'title': 'Wind Speed Last 4 Hours',
-                    'start': '-14400'
-                },
-                {
-                    'filename': 'wind_speed_hourly_mobile.png',
-                    'title': 'Wind Speed Last 4 Hours',
-                    'start': '-14400',
-                    'title_font': 30,
-                    'axis_font': 17,
-                    'legend_font': 29,
-                    'unit_font': 20,
-                    'padding': 4,
-                    'line_stroke': 8
-                },
                 {
                     'filename': 'wind_speed_daily.png',
                     'title': 'Wind Speed Last 24 Hours',
