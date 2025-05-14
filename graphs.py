@@ -531,8 +531,6 @@ def createGraphs(daily=True, weekly=False, monthly=False, yearly=False):
                 toc = time.perf_counter()
                 print(f"{graph_variation['filename']} took {toc - tic:0.4f} seconds")
 
-                print(status)
-
     overall_toc = time.perf_counter()
     print(f"Graph generation took {overall_toc - overall_tic:0.4f} seconds")
 
