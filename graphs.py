@@ -6,7 +6,7 @@ import collections
 from subprocess import getstatusoutput
 import time
 
-def createGraphs(monthly=False, yearly=False):
+def createGraphs(daily=True, weekly=False, monthly=False, yearly=False):
     DIR = os.path.dirname(os.path.realpath(__file__))
 
     temp_sensors = config['temp_sensors']
@@ -409,9 +409,13 @@ def createGraphs(monthly=False, yearly=False):
                     max_name_length = name_length
             max_name_length += 2
             for graph_variation in graph['variations']:
+                if 'daily' in graph_variation['filename'] and not daily:
+                    continue
                 if 'yearly' in graph_variation['filename'] and not yearly:
                     continue
                 if 'monthly' in graph_variation['filename'] and not monthly:
+                    continue
+                if 'weekly' in graph_variation['filename'] and not weekly:
                     continue
                 if 'title_font' not in graph_variation:
                     graph_variation['title_font'] = 12
