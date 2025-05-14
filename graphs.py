@@ -447,6 +447,14 @@ def createGraphs(daily=True, weekly=False, monthly=False, yearly=False):
 
                 padding = graph_variation['padding']
                 label = 'NOW'.rjust(padding+3)+'MIN'.rjust(padding+4)+'MAX'.rjust(padding+3)+'AVG'.rjust(padding+4)
+
+                site_display_name = config.get("site_display_name", False)
+                graphs_with_no_display_name = ['lake', 'wind']
+                if site_display_name and all(x not in graph['rrd_path'] for x in graphs_with_no_display_name):
+                    graph_title = f"{site_display_name} {graph_variation['title']}"
+                else:
+                    graph_title = graph_variation['title']
+
                 command = '''
                 rrdtool graph %s/%s \\
                 -w 1024 -h 500 -a PNG \\
@@ -459,7 +467,7 @@ def createGraphs(daily=True, weekly=False, monthly=False, yearly=False):
                 --start %s --end now \\
                 --vertical-label '%s' \\
                 COMMENT:'%s\\n' \\
-                ''' % (directory, graph_variation['filename'], graph_variation['title'], \
+                ''' % (directory, graph_variation['filename'], graph_title, \
                     graph_variation['title_font'], graph_variation['axis_font'], \
                     graph_variation['legend_font'], graph_variation['unit_font'], \
                     graph_variation['start'], graph['vertical_label'], \
