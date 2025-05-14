@@ -1,5 +1,6 @@
+boto3
+pyHS100
 BeautifulSoup4
 requests
-paramiko
-pyHS100
-boto3
+adafruit-circuitpython-bmp280
+RPi.GPIO
