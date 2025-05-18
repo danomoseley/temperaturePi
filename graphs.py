@@ -7,7 +7,7 @@ from subprocess import getstatusoutput
 import time
 import temperature
 
-def createGraphs(daily=True, weekly=False, monthly=False, yearly=False):
+def createGraphs(daily=True, weekly=False, monthly=False, yearly=False, radon=False):
     DIR = os.path.dirname(os.path.realpath(__file__))
 
     temp_sensors = config['temp_sensors']
@@ -505,6 +505,8 @@ def createGraphs(daily=True, weekly=False, monthly=False, yearly=False):
                 if lake_temp_sensors_disabled:
                     if 'lake' in graph_variation['filename'] or 'wind' in graph_variation['filename']:
                         continue
+                if 'radon' in graph_variation['filename'] and not radon:
+                    continue
                 if 'daily' in graph_variation['filename'] and not daily:
                     continue
                 if 'yearly' in graph_variation['filename'] and not yearly:

@@ -21,6 +21,7 @@ def roundDownDatetime(dt):
                              dt.hour, dt.minute - delta_min)
 
 overall_tic = time.perf_counter()
+process_radon_sensors = datetime.now().minute < 5
 
 if os.path.isfile(os.path.join(DIR, 'database', 'temp.rrd')):
     tic = time.perf_counter()
@@ -41,10 +42,13 @@ if os.path.isfile(os.path.join(DIR, 'database', 'pressure.rrd')):
     print(f"Pressure processing took {toc - tic:0.4f} seconds")
 
 if os.path.isfile(os.path.join(DIR, 'database', 'radon.rrd')):
-    tic = time.perf_counter()
-    radon.process()
-    toc = time.perf_counter()
-    print(f"Radon processing took {toc - tic:0.4f} seconds")
+    if process_radon_sensors:
+        tic = time.perf_counter()
+        radon.process()
+        toc = time.perf_counter()
+        print(f"Radon processing took {toc - tic:0.4f} seconds")
+    else:
+        print("Skipping radon processing")
 
 if os.path.isfile(os.path.join(DIR, 'database', 'lake_temp.rrd')):
     tic = time.perf_counter()
@@ -52,7 +56,7 @@ if os.path.isfile(os.path.join(DIR, 'database', 'lake_temp.rrd')):
     toc = time.perf_counter()
     print(f"Lake Temp processing took {toc - tic:0.4f} seconds")
 
-graphs.createGraphs(daily=True)
+graphs.createGraphs(daily=True, radon=process_radon_sensors)
 
 expires = datetime.utcnow() + timedelta(minutes=5)
 expires = roundDownDatetime(expires)
@@ -75,13 +79,13 @@ print(f"Daily graphs upload took {toc - tic:0.4f} seconds")
 expires_15_minutes = datetime.utcnow() + timedelta(minutes=15)
 expires_15_minutes = roundDownDatetime(expires_15_minutes)
 
-now = datetime.now()
+create_radon_extras = now.minute < 15
 create_weekly = (now.minute < 5 or 15 <= now.minute < 20 or 30 <= now.minute < 35 or 45 <= now.minute < 50)
 create_monthly = (5 <= now.minute < 10 or 20 <= now.minute < 25 or 35 <= now.minute < 40 or 50 <= now.minute < 55)
 create_yearly = (10 <= now.minute < 15 or 25 <= now.minute < 30 or 40 <= now.minute < 45 or 55 <= now.minute)
 
 if create_weekly or create_monthly or create_yearly:
-    graphs.createGraphs(daily=False, weekly=create_weekly, monthly=create_monthly, yearly=create_yearly)
+    graphs.createGraphs(daily=False, weekly=create_weekly, monthly=create_monthly, yearly=create_yearly, radon=create_radon_extras)
 
     tic = time.perf_counter()
     files = os.listdir(directory)
