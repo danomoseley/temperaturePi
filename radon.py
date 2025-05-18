@@ -118,33 +118,38 @@ def readRadonSensors():
 
     rrd_path = os.path.join(DIR, 'database', 'radon.rrd')
     
-    serial_number = next(iter(config['radon_sensors']))
-    wave2 = Wave2(serial_number)
-
     def _signal_handler(sig, frame):
         wave2.disconnect()
         sys.exit(0)
 
     signal.signal(signal.SIGINT, _signal_handler)
 
-    connection_tries = 0
-    while True:
-        try:
-            wave2.connect(retries=6)
-            current_values = wave2.read()
-            radon_sta = current_values.radon_sta
-            wave2.disconnect()
-            command = '/usr/bin/rrdtool update %s N:%s' % (rrd_path, radon_sta)
-            status, message = getstatusoutput(command)
-            if status != 0:
-                errors.append('Error running %s - %d - %s' % (command, status, message))
-        except btle.BTLEDisconnectError as e:
-            connection_tries += 1
-            if connection_tries > 5:
-                errors.append('Could not connect to radon sensor after 5 tries, giving up..')
-            else:
-                continue
-        break
+    radon_readings = ['NaN']*len(config['radon_sensors'])
+
+    for serial_number, sensor in config['radon_sensors'].items():
+        wave2 = Wave2(serial_number)
+
+        connection_tries = 0
+        while True:
+            try:
+                wave2.connect()
+                current_values = wave2.read()
+                radon_sta = current_values.radon_sta
+                wave2.disconnect()
+                radon_readings[sensor['rrd_order']-1] = radon_sta
+            except btle.BTLEDisconnectError as e:
+                connection_tries += 1
+                if connection_tries > 5:
+                    errors.append(f"Could not connect to radon sensor {serial_number} after 5 tries, giving up..")
+                else:
+                    continue
+            break
+
+    rrd_values = ':'.join(map(str, radon_readings))
+    command = '/usr/bin/rrdtool update %s N:%s' % (rrd_path, rrd_values)
+    status, message = getstatusoutput(command)
+    if status != 0:
+        errors.append('Error running %s - %d - %s' % (command, status, message))
 
     return errors
 
