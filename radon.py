@@ -33,6 +33,7 @@ import time
 from utils import sendAlertEmail, getExceptionInfo
 
 from config import config
+import temperature
 
 DIR = os.path.dirname(os.path.realpath(__file__))
 
@@ -113,6 +114,11 @@ class CurrentValues():
         return msg
 
 
+def writeReadingsToDb(readings):
+    for serial_code, reading in readings.items():
+        temperature.addTemp(str(serial_code), reading)
+
+
 def readRadonSensors():
     errors = []
 
@@ -125,6 +131,7 @@ def readRadonSensors():
     signal.signal(signal.SIGINT, _signal_handler)
 
     radon_readings = ['NaN']*len(config['radon_sensors'])
+    sensor_readings = {}
 
     for serial_number, sensor in config['radon_sensors'].items():
         wave2 = Wave2(serial_number)
@@ -137,6 +144,7 @@ def readRadonSensors():
                 radon_sta = current_values.radon_sta
                 wave2.disconnect()
                 radon_readings[sensor['rrd_order']-1] = radon_sta
+                sensor_readings[serial_number] = radon_sta
             except btle.BTLEDisconnectError as e:
                 connection_tries += 1
                 if connection_tries > 5:
@@ -150,6 +158,8 @@ def readRadonSensors():
     status, message = getstatusoutput(command)
     if status != 0:
         errors.append('Error running %s - %d - %s' % (command, status, message))
+
+    writeReadingsToDb(sensor_readings)
 
     return errors
 
