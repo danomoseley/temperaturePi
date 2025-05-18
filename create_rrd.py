@@ -75,7 +75,6 @@ for database in databases:
         RRA:AVERAGE:0.5:12:168 \\
         RRA:AVERAGE:0.5:12:720 \\
         RRA:AVERAGE:0.5:288:365'''
-        #print command
         status, message = getstatusoutput(command)
         if status == 0:
             print('%s created' % database['rrd_path'])
