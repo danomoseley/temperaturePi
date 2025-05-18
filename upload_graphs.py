@@ -8,6 +8,7 @@ import temperature
 import lake_temp
 import pressure
 import humidity
+import radon
 import graphs
 
 import boto3
@@ -33,13 +34,17 @@ if os.path.isfile(os.path.join(DIR, 'database', 'humidity.rrd')):
     toc = time.perf_counter()
     print(f"Humidity processing took {toc - tic:0.4f} seconds")
 
-
 if os.path.isfile(os.path.join(DIR, 'database', 'pressure.rrd')):
     tic = time.perf_counter()
     pressure.process()
     toc = time.perf_counter()
     print(f"Pressure processing took {toc - tic:0.4f} seconds")
 
+if os.path.isfile(os.path.join(DIR, 'database', 'radon.rrd')):
+    tic = time.perf_counter()
+    radon.process()
+    toc = time.perf_counter()
+    print(f"Radon processing took {toc - tic:0.4f} seconds")
 
 if os.path.isfile(os.path.join(DIR, 'database', 'lake_temp.rrd')):
     tic = time.perf_counter()

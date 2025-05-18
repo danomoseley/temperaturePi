@@ -4,3 +4,4 @@ BeautifulSoup4
 requests
 adafruit-circuitpython-bmp280
 RPi.GPIO
+bluepy

@@ -71,6 +71,15 @@ config = {
             'color': '#66CCFF'
         }
     },
+    'radon_sensors': {
+        1234567890 : {
+            'name': 'Basement',
+            'ds_name': 'basement',
+            'display_order': 1,
+            'rrd_order': 1
+            'color': '#66CCFF',
+        }
+    },
     'lake_temp_sensors_disabled': False,
     'lake_temp_sensors': {
         'air_temperature': {

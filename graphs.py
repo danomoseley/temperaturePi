@@ -22,6 +22,10 @@ def createGraphs(daily=True, weekly=False, monthly=False, yearly=False):
     sorted_pressure_sensor_ids = sorted(pressure_sensors, key=lambda key: pressure_sensors[key]['display_order'])
     sorted_pressure_sensors = [pressure_sensors[k] for k in sorted_pressure_sensor_ids if not pressure_sensors[k].get('disabled', False)]
 
+    radon_sensors = config['radon_sensors']
+    sorted_radon_sensor_ids = sorted(radon_sensors, key=lambda key: radon_sensors[key]['display_order'])
+    sorted_radon_sensors = [radon_sensors[k] for k in sorted_radon_sensor_ids if not radon_sensors[k].get('disabled', False)]
+
     lake_temp_sensors = config['lake_temp_sensors']
     sorted_lake_temp_sensor_ids = sorted(lake_temp_sensors, key=lambda key: lake_temp_sensors[key]['display_order'])
     sorted_lake_temp_sensors = [lake_temp_sensors[k] for k in sorted_lake_temp_sensor_ids if not lake_temp_sensors[k].get('disabled', False)]
@@ -170,6 +174,82 @@ def createGraphs(daily=True, weekly=False, monthly=False, yearly=False):
                 {
                     'filename': 'pressure_yearly_mobile.png',
                     'title': 'Yearly Air Pressure',
+                    'start': '-1y',
+                    'title_font': 30,
+                    'axis_font': 17,
+                    'legend_font': 29,
+                    'unit_font': 20,
+                    'padding': 4,
+                    'line_stroke': 8
+                },
+            ]
+        },
+        {
+            'rrd_path': os.path.join(DIR, 'database', 'radon.rrd'),
+            'vertical_label': 'Radon (pCi/L)',
+            'unit': ' ',
+            'sensors': sorted_radon_sensors,
+            'extra_options': [
+                '--alt-autoscale',
+                '--alt-y-grid',
+            ],
+            'variations': [
+                {
+                    'filename': 'radon_daily.png',
+                    'title': 'Radon Last 24 Hours',
+                    'start': '-1d'
+                },
+                {
+                    'filename': 'radon_daily_mobile.png',
+                    'title': 'Radon Last 24 Hours',
+                    'start': '-1d',
+                    'title_font': 30,
+                    'axis_font': 17,
+                    'legend_font': 29,
+                    'unit_font': 20,
+                    'padding': 4,
+                    'line_stroke': 8
+                },
+                {
+                    'filename': 'radon_weekly.png',
+                    'title': 'Weekly Radon',
+                    'start': '-1w'
+                },
+                {
+                    'filename': 'radon_weekly_mobile.png',
+                    'title': 'Weekly Radon',
+                    'start': '-1w',
+                    'title_font': 30,
+                    'axis_font': 17,
+                    'legend_font': 29,
+                    'unit_font': 20,
+                    'padding': 4,
+                    'line_stroke': 8
+                },
+                {
+                    'filename': 'radon_monthly.png',
+                    'title': 'Monthly Radon',
+                    'start': '-1m'
+                },
+                {
+                    'filename': 'radon_monthly_mobile.png',
+                    'title': 'Monthly Radon',
+                    'start': '-1m',
+                    'title_font': 30,
+                    'axis_font': 17,
+                    'legend_font': 29,
+                    'unit_font': 20,
+                    'padding': 4,
+                    'line_stroke': 8
+                },
+                {
+                    'filename': 'radon_yearly.png',
+                    'title': 'Yearly Radon',
+                    'start': '-1y'
+                },
+                {
+                    'filename': 'radon_yearly_mobile.png',
+                    'title': 'Yearly Radon',
                     'start': '-1y',
                     'title_font': 30,
                     'axis_font': 17,

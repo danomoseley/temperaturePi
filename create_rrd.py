@@ -25,6 +25,10 @@ wind_speed_sensors = config['wind_speed_sensors']
 sorted_wind_speed_sensor_ids = sorted(wind_speed_sensors, key=lambda key: wind_speed_sensors[key]['rrd_order'])
 sorted_wind_speed_sensors = [wind_speed_sensors[k] for k in sorted_wind_speed_sensor_ids]
 
+radon_sensors = config['radon_sensors']
+sorted_radon_sensor_ids = sorted(radon_sensors, key=lambda key: radon_sensors[key]['rrd_order'])
+sorted_radon_sensors = [radon_sensors[k] for k in sorted_radon_sensor_ids]
+
 directory = os.path.join(DIR, 'database')
 
 if not os.path.exists(directory):
@@ -55,7 +59,10 @@ databases = [
         'rrd_path': os.path.join(directory, 'wind_speed.rrd'),
         'sensors': sorted_wind_speed_sensors
     },
-
+    {
+        'rrd_path': os.path.join(directory, 'radon.rrd'),
+        'sensors': sorted_radon_sensors
+    },
 ]
 
 for database in databases:
