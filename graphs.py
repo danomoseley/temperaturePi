@@ -197,7 +197,10 @@ def createGraphs(daily=True, weekly=False, monthly=False, yearly=False, radon=Fa
                 {
                     'filename': 'radon_daily.png',
                     'title': 'Radon Last 24 Hours',
-                    'start': '-1d'
+                    'start': '-1d',
+                    'extra_options': [
+                        '--slope-mode',
+                    ],
                 },
                 {
                     'filename': 'radon_daily_mobile.png',
@@ -208,7 +211,10 @@ def createGraphs(daily=True, weekly=False, monthly=False, yearly=False, radon=Fa
                     'legend_font': 29,
                     'unit_font': 20,
                     'padding': 4,
-                    'line_stroke': 8
+                    'line_stroke': 8,
+                    'extra_options': [
+                        '--slope-mode',
+                    ],
                 },
                 {
                     'filename': 'radon_weekly.png',
@@ -557,6 +563,9 @@ def createGraphs(daily=True, weekly=False, monthly=False, yearly=False, radon=Fa
                     label.rjust(len(label) + max_name_length))
                 if 'extra_options' in graph:
                     for extra_option in graph['extra_options']:
+                        command += ' %s ' % (extra_option)
+                if 'extra_options' in graph_variation:
+                    for extra_option in graph_variation['extra_options']:
                         command += ' %s ' % (extra_option)
 
                 for sensor in graph['sensors']:

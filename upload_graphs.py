@@ -70,7 +70,7 @@ tic = time.perf_counter()
 files = os.listdir(directory)
 for file in files:
     file_path = os.path.join(directory, file)
-    s3.Bucket(s3_bucket).upload_file(file_path, f"latest_graphs/{file}", ExtraArgs={'Expires':expires})
+    s3.Bucket(s3_bucket).upload_file(file_path, f"latest_graphs/{file}", ExtraArgs={'Expires':expires,'ContentType':'image/png'})
 
 toc = time.perf_counter()
 
@@ -91,7 +91,7 @@ if create_weekly or create_monthly or create_yearly:
     files = os.listdir(directory)
     for file in files:
         file_path = os.path.join(directory, file)
-        s3.Bucket(s3_bucket).upload_file(file_path, f"latest_graphs/{file}",ExtraArgs={'Expires':expires_15_minutes})
+        s3.Bucket(s3_bucket).upload_file(file_path, f"latest_graphs/{file}",ExtraArgs={'Expires':expires_15_minutes,'ContentType':'image/png'})
 
     toc = time.perf_counter()
 
