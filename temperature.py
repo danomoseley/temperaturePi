@@ -115,6 +115,7 @@ def incrementDailyHeatingMinutes(sensor_id):
 
 def readSensors():
     errors = []
+    data = {}
     temps = ['NaN']*len(config['temp_sensors'])
     thermostat_data = []
 
@@ -148,6 +149,7 @@ def readSensors():
                         temp_f = (temp_c * 9/5) + 32
                         if temp_f > -100 and temp_f < 120:
                             addTemp(sensor_id, temp_f)
+                            data[sensor_config['ds_name']] = temp_f
                             if sensor_config.get("thermostat_enabled", False):
                                 thermostat_data.append({'sensor_config':sensor_config, 'current_temp_f':temp_f})
                             rrd_order = config['temp_sensors'][sensor_id]['rrd_order']
@@ -191,7 +193,7 @@ def readSensors():
         thermostat_errors = runThermostat(thermostat_data)
         errors = errors + thermostat_errors
     
-    return errors
+    return (data, errors)
 
 def getDailySensorReadingMetrics():
     conn = dbConnection()
@@ -220,8 +222,9 @@ def process():
         provisionDatabase()
 
     errors = []
+    data = {}
     try:
-        sensor_errors = readSensors()
+        data, sensor_errors = readSensors()
         errors.extend(sensor_errors)
     except Exception as e:
         errors.append(getExceptionInfo(e))
@@ -232,6 +235,7 @@ def process():
         print('\n'.join(errors))
 
     #getDailySensorReadingMetrics()
+    return data
 
 if __name__ == '__main__':
     process()

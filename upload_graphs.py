@@ -1,4 +1,5 @@
 #!/usr/bin/python3
+import json
 import os
 from subprocess import getstatusoutput
 from config import config
@@ -24,26 +25,33 @@ def process(create_weekly=None, create_monthly=None, create_yearly=None, process
 
     start_time = datetime.now()
     
+    data = {}
+
     if process_radon_sensors is None:
         process_radon_sensors = start_time.minute < 5
 
     if os.path.isfile(os.path.join(DIR, 'database', 'temp.rrd')):
         tic = time.perf_counter()
-        temperature.process()
+        data["temperature"] = temperature.process()
         toc = time.perf_counter()
         print(f"Temperature processing took {toc - tic:0.4f} seconds")
 
     if os.path.isfile(os.path.join(DIR, 'database', 'humidity.rrd')):
         tic = time.perf_counter()
-        humidity.process()
+        data["humidity"] = humidity.process()
         toc = time.perf_counter()
         print(f"Humidity processing took {toc - tic:0.4f} seconds")
 
     if os.path.isfile(os.path.join(DIR, 'database', 'pressure.rrd')):
         tic = time.perf_counter()
-        pressure.process()
+        data["pressure"] = pressure.process()
         toc = time.perf_counter()
         print(f"Pressure processing took {toc - tic:0.4f} seconds")
+
+    command = '/usr/bin/mosquitto_pub -t temperaturePi/redcamp/sensors -h 192.168.2.25 -m \'%s\'' % (json.dumps(data))
+    status, message = getstatusoutput(command)
+    if status != 0:
+        errors.append('Error running %s - %d - %s' % (command, status, message))
 
     if os.path.isfile(os.path.join(DIR, 'database', 'radon.rrd')):
         if process_radon_sensors:

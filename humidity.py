@@ -16,6 +16,7 @@ def readHumiditySensors():
         getstatusoutput('sudo pigpiod')
 
     sensor_readings = [None]*(len(config['humidity_sensors'])+1)
+    data = {}
     for gpio_pin, sensor in config['humidity_sensors'].items():
         failed_attempts = 0;
         readings = []
@@ -31,6 +32,7 @@ def readHumiditySensors():
                 else:
                     avg_humidity = sum(readings)/len(readings)
                     sensor_readings[sensor['rrd_order']] = avg_humidity
+                    data[sensor['ds_name']] = avg_humidity
                     break
             else:
                 failed_attempts += 1
@@ -47,12 +49,13 @@ def readHumiditySensors():
             errors.append('Error running %s - %d - %s' % (command, status, message))
     else:
         errors.append('Error processing humidity sensors')
-    return errors
+    return (data, errors)
 
 def process():
     errors = []
+    data = {}
     try:
-        sensor_errors = readHumiditySensors()
+        data, sensor_errors = readHumiditySensors()
         errors.extend(sensor_errors)
     except Exception as e:
         errors.append(getExceptionInfo(e))
@@ -61,6 +64,8 @@ def process():
         if 'gmail' in config:
             sendAlertEmail(errors)
         print('\n'.join(errors))
+
+    return data
 
 if __name__ == "__main__":
     process()

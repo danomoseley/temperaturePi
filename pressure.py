@@ -30,19 +30,21 @@ def readPressureSensors():
     status, message = getstatusoutput(command)
     if status != 0:
         errors.append('Error running %s - %d - %s' % (command, status, message))
-   
+
+    data = {"hpa":pressure_hpa,"inhg":pressure_inhg}
 
     #print("\nTemperature: %0.1f F" % convert_c_to_f(sensor.temperature))
     #print("Pressure: %0.1f hPa" % pressure_hpa)
     #print("Pressure: %0.1f In" % pressure_inhg)
     #print("Altitude: %0.2f feet" % (sensor.altitude * 3.2808))
 
-    return errors
+    return (data, errors)
 
 def process():
     errors = []
+    data = {}
     try:
-        sensor_errors = readPressureSensors()
+        data, sensor_errors = readPressureSensors()
         errors.extend(sensor_errors)
     except Exception as e:
         errors.append(getExceptionInfo(e))
@@ -51,6 +53,8 @@ def process():
         if 'gmail' in config:
             sendAlertEmail(errors)
         print('\n'.join(errors))
+
+    return data
 
 if __name__ == "__main__":
     process()
