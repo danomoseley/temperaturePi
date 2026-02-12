@@ -145,7 +145,7 @@ def readRadonSensors():
                 wave2.disconnect()
                 radon_readings[sensor['rrd_order']-1] = radon_sta
                 sensor_readings[serial_number] = radon_sta
-            except btle.BTLEDisconnectError as e:
+            except (btle.BTLEDisconnectError, btle.BTLEInternalError) as e:
                 connection_tries += 1
                 if connection_tries > 5:
                     errors.append(f"Could not connect to radon sensor {serial_number} after 5 tries, giving up..")
