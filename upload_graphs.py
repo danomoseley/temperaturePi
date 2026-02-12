@@ -48,10 +48,12 @@ def process(create_weekly=None, create_monthly=None, create_yearly=None, process
         toc = time.perf_counter()
         print(f"Pressure processing took {toc - tic:0.4f} seconds")
 
-    command = '/usr/bin/mosquitto_pub -t temperaturePi/redcamp/sensors -h 192.168.2.25 -m \'%s\'' % (json.dumps(data))
-    status, message = getstatusoutput(command)
-    if status != 0:
-        errors.append('Error running %s - %d - %s' % (command, status, message))
+    if 'mqtt' in config and 'host' in config['mqtt']:
+        site_slug = config['site_display_name'].lower().replace(' ', '_')
+        command = '/usr/bin/mosquitto_pub -t temperaturePi/%s/sensors -h %s -m \'%s\'' % (site_slug, config['mqtt']['host'], json.dumps(data))
+        status, message = getstatusoutput(command)
+        if status != 0:
+            errors.append('Error running %s - %d - %s' % (command, status, message))
 
     if os.path.isfile(os.path.join(DIR, 'database', 'radon.rrd')):
         if process_radon_sensors:
